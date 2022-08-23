@@ -17,10 +17,16 @@ _global_script_classes=[ {
 "base": "Resource",
 "class": @"WebBlogEntry",
 "language": @"GDScript",
-"path": "res://addons/web_blog/classes/WebBlogEntry.gd"
+"path": "res://addons/web_blog/classes/WebBlogPostEntry.gd"
+}, {
+"base": "Resource",
+"class": @"WebBlogPost",
+"language": @"GDScript",
+"path": "res://addons/web_blog/classes/WebBlogPost.gd"
 } ]
 _global_script_class_icons={
-@"WebBlogEntry": "res://addons/web_blog/icons/icon_web_blog_entry.svg",
+@"WebBlogEntry": "res://addons/web_blog/icons/icon_web_blog_post_entry.svg",
+@"WebBlogPost": "res://addons/web_blog/icons/icon_web_blog_post.svg",
 @"WebBlog": "res://addons/web_blog/icons/icon_web_blog.svg"
 }
 
