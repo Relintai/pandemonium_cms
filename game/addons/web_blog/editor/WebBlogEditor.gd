@@ -36,19 +36,19 @@ func _on_blog_editor_button_toggled(on):
 			_wne_tool_bar_button.set_pressed_no_signal(true)
 	
 func _edited_node_changed(web_node : WebNode):
-	_edited_blog = web_node
-	
 	if !_wne_tool_bar_button:
 		return
-		
+	
 	var wne : Control = Engine.get_global("WebNodeEditor")
 	if wne:
 		if web_node is WebBlog:
+			_edited_blog = web_node
 			_wne_tool_bar_button.show()
 			_wne_tool_bar_button.pressed = true
 			#wne.switch_to_main_screen_tab(self)
 		else:
 			_wne_tool_bar_button.hide()
+			#_edited_blog = null
 			#add method to switch off to the prev screen
 			#wne.switch_to_main_screen_tab(self)
 
@@ -66,8 +66,8 @@ func _on_new_post_requested():
 	get_node("./Tabs").add_child(nps)
 	
 	# Hack for now. Todo add support for this into UndoRedo without hacks
-	undo_redo.create_action("Created WebBlog Post")
-	undo_redo.add_do_method(_edited_blog, "null_method")
-	undo_redo.add_undo_method(_edited_blog, "null_method")
-	undo_redo.commit_action()
+#	undo_redo.create_action("Created WebBlog Post")
+#	undo_redo.add_do_method(_edited_blog, "null_method")
+#	undo_redo.add_undo_method(_edited_blog, "null_method")
+#	undo_redo.commit_action()
 

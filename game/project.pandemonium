@@ -14,7 +14,7 @@ _global_script_classes=[ {
 "language": @"GDScript",
 "path": "res://addons/web_blog/classes/WebBlog.gd"
 }, {
-"base": "Resource",
+"base": "WebNode",
 "class": @"WebBlogPost",
 "language": @"GDScript",
 "path": "res://addons/web_blog/classes/WebBlogPost.gd"
