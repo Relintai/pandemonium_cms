@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://addons/web_blog/classes/WebBlog.gd" type="Script" id=2]
+[ext_resource path="res://addons/web_blog/classes/WebBlogPost.gd" type="Script" id=3]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 3 )
+post_name = "BlogTest"
+entries = [  ]
 
 [node name="WebServer" type="WebServerSimple"]
 script = ExtResource( 1 )
@@ -15,3 +21,4 @@ data = "<a href=\"/blog\">Blog</a>"
 [node name="WebBlog" type="WebNode" parent="WebRoot"]
 uri_segment = "blog"
 script = ExtResource( 2 )
+posts = [ SubResource( 1 ) ]

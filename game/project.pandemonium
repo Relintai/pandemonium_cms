@@ -15,18 +15,24 @@ _global_script_classes=[ {
 "path": "res://addons/web_blog/classes/WebBlog.gd"
 }, {
 "base": "Resource",
-"class": @"WebBlogEntry",
+"class": @"WebBlogPost",
+"language": @"GDScript",
+"path": "res://addons/web_blog/classes/WebBlogPost.gd"
+}, {
+"base": "Resource",
+"class": @"WebBlogPostEntry",
 "language": @"GDScript",
 "path": "res://addons/web_blog/classes/WebBlogPostEntry.gd"
 }, {
 "base": "Resource",
-"class": @"WebBlogPost",
+"class": @"WebBlogPostEntryTitleText",
 "language": @"GDScript",
-"path": "res://addons/web_blog/classes/WebBlogPost.gd"
+"path": "res://addons/web_blog/classes/post_entries/WebBlogPostEntryTitleText.gd"
 } ]
 _global_script_class_icons={
-@"WebBlogEntry": "res://addons/web_blog/icons/icon_web_blog_post_entry.svg",
 @"WebBlogPost": "res://addons/web_blog/icons/icon_web_blog_post.svg",
+@"WebBlogPostEntryTitleText": "res://addons/web_blog/icons/icon_web_blog_post_entry_title_text.svg",
+@"WebBlogPostEntry": "res://addons/web_blog/icons/icon_web_blog_post_entry.svg",
 @"WebBlog": "res://addons/web_blog/icons/icon_web_blog.svg"
 }
 

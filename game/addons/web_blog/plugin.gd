@@ -6,6 +6,7 @@ var web_blog_editor : Control = null
 func _enter_tree():
 	var wbes : PackedScene = ResourceLoader.load("res://addons/web_blog/editor/WebBlogEditor.tscn")
 	web_blog_editor = wbes.instance()
+	web_blog_editor.undo_redo = get_undo_redo()
 	
 	var wne : Control = Engine.get_global("WebNodeEditor")
 	if wne:

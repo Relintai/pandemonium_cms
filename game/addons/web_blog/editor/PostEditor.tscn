@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/web_blog/editor/PostEditor.gd" type="Script" id=1]
+
+[node name="PostEditor" type="VBoxContainer"]
+margin_top = 28.0
+margin_right = 1024.0
+margin_bottom = 28.0
+script = ExtResource( 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 24.0
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+margin_top = 5.0
+margin_right = 70.0
+margin_bottom = 19.0
+text = "Post Name"
+
+[node name="PostNameLE" type="LineEdit" parent="HBoxContainer"]
+margin_left = 74.0
+margin_right = 1024.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "BlogPost"
+align = 1
+
+[connection signal="text_entered" from="HBoxContainer/PostNameLE" to="." method="_on_PostNameLE_text_entered"]

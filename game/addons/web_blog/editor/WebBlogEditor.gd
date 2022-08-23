@@ -1,7 +1,9 @@
 tool
-extends Control
+extends PanelContainer
 
 var _wne_tool_bar_button : Button = null
+var _edited_blog : WebBlog = null
+var undo_redo : UndoRedo = null
 
 func _enter_tree():
 	var wne : Control = Engine.get_global("WebNodeEditor")
@@ -20,6 +22,11 @@ func _enter_tree():
 func _exit_tree():
 	if _wne_tool_bar_button:
 		_wne_tool_bar_button.queue_free()
+		_wne_tool_bar_button = null
+		
+	var wne : Control = Engine.get_global("WebNodeEditor")
+	if wne:
+		wne.disconnect("edited_node_changed", self, "_edited_node_changed")
 
 func _on_blog_editor_button_toggled(on):
 	if on:
@@ -29,6 +36,11 @@ func _on_blog_editor_button_toggled(on):
 			_wne_tool_bar_button.set_pressed_no_signal(true)
 	
 func _edited_node_changed(web_node : WebNode):
+	_edited_blog = web_node
+	
+	if !_wne_tool_bar_button:
+		return
+		
 	var wne : Control = Engine.get_global("WebNodeEditor")
 	if wne:
 		if web_node is WebBlog:
@@ -39,4 +51,23 @@ func _edited_node_changed(web_node : WebNode):
 			_wne_tool_bar_button.hide()
 			#add method to switch off to the prev screen
 			#wne.switch_to_main_screen_tab(self)
+
+func _on_new_post_requested():
+	if !_edited_blog:
+		return
+		
+	var post : WebBlogPost = WebBlogPost.new()
+	_edited_blog.add_post(post)
+	
+	var post_editor_scene : PackedScene = ResourceLoader.load("res://addons/web_blog/editor/PostEditor.tscn", "PackedScene")
+	var nps : Control = post_editor_scene.instance()
+	nps.undo_redo = undo_redo
+	nps.set_post(post)
+	get_node("./Tabs").add_child(nps)
+	
+	# Hack for now. Todo add support for this into UndoRedo without hacks
+	undo_redo.create_action("Created WebBlog Post")
+	undo_redo.add_do_method(_edited_blog, "null_method")
+	undo_redo.add_undo_method(_edited_blog, "null_method")
+	undo_redo.commit_action()
 
