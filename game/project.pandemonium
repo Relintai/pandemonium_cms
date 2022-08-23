@@ -32,8 +32,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 @"WebBlogPost": "res://addons/web_blog/icons/icon_web_blog_post.svg",
 @"WebBlogPostEntryTitleText": "res://addons/web_blog/icons/icon_web_blog_post_entry_title_text.svg",
-@"WebBlogPostEntry": "res://addons/web_blog/icons/icon_web_blog_post_entry.svg",
-@"WebBlog": "res://addons/web_blog/icons/icon_web_blog.svg"
+@"WebBlog": "res://addons/web_blog/icons/icon_web_blog.svg",
+@"WebBlogPostEntry": "res://addons/web_blog/icons/icon_web_blog_post_entry.svg"
 }
 
 [application]

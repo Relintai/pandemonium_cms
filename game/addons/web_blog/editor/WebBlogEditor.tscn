@@ -19,5 +19,3 @@ size_flags_vertical = 3
 [node name="Posts" parent="Tabs" instance=ExtResource( 3 )]
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[connection signal="new_post_request" from="Tabs/Posts" to="." method="_on_new_post_requested"]

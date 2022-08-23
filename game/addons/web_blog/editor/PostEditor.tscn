@@ -25,5 +25,3 @@ margin_bottom = 24.0
 size_flags_horizontal = 3
 text = "BlogPost"
 align = 1
-
-[connection signal="text_entered" from="HBoxContainer/PostNameLE" to="." method="_on_PostNameLE_text_entered"]

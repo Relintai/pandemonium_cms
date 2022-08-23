@@ -20,3 +20,8 @@ func _on_PostNameLE_text_entered(new_text : String):
 	undo_redo.add_do_property(self, "name", new_text)
 	undo_redo.add_undo_property(self, "name", _post.name)
 	undo_redo.commit_action()
+
+func _notification(what):
+	if what == NOTIFICATION_INSTANCED:
+		var le : LineEdit = get_node("HBoxContainer/PostNameLE")
+		le.connect("text_entered", self, "_on_PostNameLE_text_entered")
