@@ -10,7 +10,8 @@ script = ExtResource( 1 )
 
 [node name="index" type="StaticWebPage" parent="WebRoot"]
 uri_segment = "/"
-data = "<a href=\"gallery\">Gallery</a>"
+data = "<a href=\"/blog\">Blog</a>"
 
 [node name="WebBlog" type="WebNode" parent="WebRoot"]
+uri_segment = "blog"
 script = ExtResource( 2 )

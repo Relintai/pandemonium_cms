@@ -13,8 +13,14 @@ _global_script_classes=[ {
 "class": @"WebBlog",
 "language": @"GDScript",
 "path": "res://addons/web_blog/classes/WebBlog.gd"
+}, {
+"base": "Resource",
+"class": @"WebBlogEntry",
+"language": @"GDScript",
+"path": "res://addons/web_blog/classes/WebBlogEntry.gd"
 } ]
 _global_script_class_icons={
+@"WebBlogEntry": "res://addons/web_blog/icons/icon_web_blog_entry.svg",
 @"WebBlog": "res://addons/web_blog/icons/icon_web_blog.svg"
 }
 
