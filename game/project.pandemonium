@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "WebNode",
+"class": @"WebBlog",
+"language": @"GDScript",
+"path": "res://addons/web_blog/classes/WebBlog.gd"
+} ]
+_global_script_class_icons={
+@"WebBlog": "res://addons/web_blog/icons/icon_web_blog.svg"
+}
+
 [application]
 
 config/name="Pandemonium CMS"
@@ -16,7 +26,7 @@ config/icon="res://icon.png"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/web_gallery/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/web_blog/plugin.cfg", "res://addons/web_gallery/plugin.cfg" )
 
 [physics]
 
