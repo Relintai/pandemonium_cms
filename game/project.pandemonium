@@ -10,30 +10,30 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "WebNode",
-"class": @"WebBlog",
+"class": @"WebPage",
 "language": @"GDScript",
-"path": "res://addons/web_blog/classes/WebBlog.gd"
+"path": "res://addons/web_pages/classes/WebPage.gd"
+}, {
+"base": "Resource",
+"class": @"WebPageEntry",
+"language": @"GDScript",
+"path": "res://addons/web_pages/classes/WebPageEntry.gd"
+}, {
+"base": "Resource",
+"class": @"WebPageEntryTitleText",
+"language": @"GDScript",
+"path": "res://addons/web_pages/classes/post_entries/WebPageEntryTitleText.gd"
 }, {
 "base": "WebNode",
-"class": @"WebBlogPost",
+"class": @"WebPageList",
 "language": @"GDScript",
-"path": "res://addons/web_blog/classes/WebBlogPost.gd"
-}, {
-"base": "Resource",
-"class": @"WebBlogPostEntry",
-"language": @"GDScript",
-"path": "res://addons/web_blog/classes/WebBlogPostEntry.gd"
-}, {
-"base": "Resource",
-"class": @"WebBlogPostEntryTitleText",
-"language": @"GDScript",
-"path": "res://addons/web_blog/classes/post_entries/WebBlogPostEntryTitleText.gd"
+"path": "res://addons/web_pages/classes/WebPageList.gd"
 } ]
 _global_script_class_icons={
-@"WebBlogPost": "res://addons/web_blog/icons/icon_web_blog_post.svg",
-@"WebBlogPostEntryTitleText": "res://addons/web_blog/icons/icon_web_blog_post_entry_title_text.svg",
-@"WebBlog": "res://addons/web_blog/icons/icon_web_blog.svg",
-@"WebBlogPostEntry": "res://addons/web_blog/icons/icon_web_blog_post_entry.svg"
+@"WebPage": "res://addons/web_pages/icons/icon_web_page.svg",
+@"WebPageEntryTitleText": "res://addons/web_pages/icons/icon_web_page_entry_title_text.svg",
+@"WebPageEntry": "res://addons/web_pages/icons/icon_web_page_entry.svg",
+@"WebPageList": "res://addons/web_pages/icons/icon_web_page_list.svg"
 }
 
 [application]
@@ -44,7 +44,7 @@ config/icon="res://icon.png"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/web_blog/plugin.cfg", "res://addons/web_gallery/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/web_gallery/plugin.cfg", "res://addons/web_pages/plugin.cfg" )
 
 [physics]
 
