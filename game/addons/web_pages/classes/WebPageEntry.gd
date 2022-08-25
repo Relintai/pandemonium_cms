@@ -29,7 +29,7 @@ func _render_edit_bar(request : WebServerRequest) -> void:
 	var can_edit : bool = request.can_edit()
 	var can_delete : bool = request.can_delete()
 	
-	if !can_delete && !can_delete:
+	if !can_edit && !can_delete:
 		return
 		
 	var hb : HTMLBuilder = HTMLBuilder.new()
