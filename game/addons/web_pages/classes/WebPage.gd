@@ -84,7 +84,7 @@ func web_editor_handle_add(request : WebServerRequest) -> bool:
 			
 			if entry:
 				add_entry(entry)
-				request.send_redirect(request.get_url_root(), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
+				request.send_redirect(request.get_url_root())
 				return true
 			else:
 				request.body += "<div>Error processing your request!</div>"
@@ -137,8 +137,6 @@ func web_editor_handle_edit(request : WebServerRequest) -> bool:
 	var resource_id_str : String = request.get_current_path_segment()
 	
 	if resource_id_str.empty() || !resource_id_str.is_valid_integer():
-		# Todo either change the docs that this now returns "", or change it to "/"
-		# not yet sure which one is better (empty is probably better)
 		request.send_error(404)
 		return true
 	
@@ -167,8 +165,6 @@ func web_editor_handle_move_up(request : WebServerRequest) -> bool:
 	var resource_id_str : String = request.get_current_path_segment()
 	
 	if resource_id_str.empty() || !resource_id_str.is_valid_integer():
-		# Todo either change the docs that this now returns "", or change it to "/"
-		# not yet sure which one is better (empty is probably better)
 		request.send_error(404)
 		return true
 	
@@ -181,8 +177,7 @@ func web_editor_handle_move_up(request : WebServerRequest) -> bool:
 		return true
 
 	move_entry_up(entry)
-	#TODO binding missing 2nd default param
-	request.send_redirect(request.get_url_root_parent(1), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
+	request.send_redirect(request.get_url_root_parent(1))
 	return true
 	
 func web_editor_handle_move_down(request : WebServerRequest) -> bool:
@@ -197,8 +192,6 @@ func web_editor_handle_move_down(request : WebServerRequest) -> bool:
 	var resource_id_str : String = request.get_current_path_segment()
 	
 	if resource_id_str.empty() || !resource_id_str.is_valid_integer():
-		# Todo either change the docs that this now returns "", or change it to "/"
-		# not yet sure which one is better (empty is probably better)
 		request.send_error(404)
 		return true
 	
@@ -211,8 +204,7 @@ func web_editor_handle_move_down(request : WebServerRequest) -> bool:
 		return true
 
 	move_entry_down(entry)
-	#TODO binding missing 2nd default param
-	request.send_redirect(request.get_url_root_parent(1), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
+	request.send_redirect(request.get_url_root_parent(1))
 	return true
 
 func web_editor_handle_delete(request : WebServerRequest) -> bool:
@@ -243,7 +235,7 @@ func web_editor_handle_delete(request : WebServerRequest) -> bool:
 		
 		if accept == "TRUE":
 			remove_entry(entry)
-			request.send_redirect(request.get_url_root_parent(), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
+			request.send_redirect(request.get_url_root_parent())
 			return true
 		else:
 			request.body += "<div>Error processing your request!</div>"

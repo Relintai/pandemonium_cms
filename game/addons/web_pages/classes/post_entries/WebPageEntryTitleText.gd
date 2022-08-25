@@ -13,7 +13,6 @@ func get_page_entry_class_name() -> String:
 	
 func _handle_edit(request : WebServerRequest) -> void:
 	if !request.can_edit():
-		# TODO add error macro like methods to global scope for scripting (to the engine)
 		#should be ERR_FAIL_COND
 		return
 	
@@ -23,7 +22,7 @@ func _handle_edit(request : WebServerRequest) -> void:
 		text = request.get_parameter("text")
 		
 		#b.div().f().w("Save successful!").cdiv()
-		request.send_redirect(request.get_url_root_parent(2), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
+		request.send_redirect(request.get_url_root_parent(2))
 		
 	b.div().f().a(request.get_url_root_parent(2)).f().w("<-- back").ca().cdiv()
 	b.br()
