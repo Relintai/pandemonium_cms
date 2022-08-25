@@ -20,7 +20,7 @@ func handle_edit(request : WebServerRequest) -> void:
 	_handle_edit(request)
 	
 func _handle_edit(request : WebServerRequest) -> void:
-	return
+	request.send_error(404)
 
 func render_edit_bar(request : WebServerRequest) -> void:
 	_render_edit_bar(request)
