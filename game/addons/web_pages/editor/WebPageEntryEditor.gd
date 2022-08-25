@@ -4,16 +4,30 @@ extends VBoxContainer
 var _entry : WebPageEntry = null
 
 var _entry_type_label : Label = null
+var _main_container : Control = null
+
+var _editor : Control = null
+
+var WebPageEntryTitleTextEditor : PackedScene = null
 
 signal entry_add_requested_after(entry)
 signal entry_move_up_requested(entry)
 signal entry_move_down_requested(entry)
 signal entry_delete_requested(entry)
 
-func set_entry(entry : WebPageEntry) -> void:
+func set_entry(entry : WebPageEntry, undo_redo : UndoRedo) -> void:
 	_entry = entry
 	
-	_entry_type_label.text = entry.get_class()
+	var cls : String = entry.get_class()
+	_entry_type_label.text = cls
+	
+	if cls == "WebPageEntryTitleText":
+		_editor = WebPageEntryTitleTextEditor.instance()
+		
+	if _editor:
+		_editor.undo_redo = undo_redo
+		_editor.set_entry(entry)
+		_main_container.add_child(_editor)
 
 func _on_add_button_pressed():
 	emit_signal("entry_add_requested_after", _entry)
@@ -29,7 +43,10 @@ func _on_delete_button_pressed():
 	
 func _notification(what):
 	if what == NOTIFICATION_INSTANCED:
+		WebPageEntryTitleTextEditor = ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryTitleTextEditor.tscn", "PackedScene")
+		
 		_entry_type_label = get_node("PC/VBC/TopBar/EntryTypeLabel")
+		_main_container = get_node("PC/VBC/MainContainer")
 		
 		get_node("AddButton").connect("pressed", self, "_on_add_button_pressed")
 		get_node("PC/VBC/TopBar/UpButton").connect("pressed", self, "_on_up_button_pressed")

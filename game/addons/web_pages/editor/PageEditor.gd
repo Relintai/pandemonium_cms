@@ -1,7 +1,7 @@
 tool
 extends PanelContainer
 
-var PageEditor : PackedScene = null
+var WebPageEntryEditor : PackedScene = null
 
 var _wne_tool_bar_button : Button = null
 
@@ -11,11 +11,70 @@ var undo_redo : UndoRedo = null
 var _entry_name_line_edit : LineEdit = null
 var _uri_segment_line_edit : LineEdit = null
 var _add_entry_popup : AcceptDialog = null
+var _entries_container : Control = null
+
+var _entry_add_after : WebPageEntry = null
 
 func set_page(page : WebPage):
+	if _page:
+		_page.disconnect("entries_changed", self, "on_page_entries_changed")
+		
 	_page = page
+	
+	if _page:
+		_page.connect("entries_changed", self, "on_page_entries_changed")
+	
 	_entry_name_line_edit.text = page.name
 	_uri_segment_line_edit.text = page.uri_segment
+	
+	recreate()
+
+func recreate() -> void:
+	clear()
+	create_editors()
+
+func create_editors() -> void:
+	for i in range(_page.entries.size()):
+		var e : WebPageEntry = _page.entries[i]
+		
+		if e:
+			var ee : Control = create_editor_for_entry(e)
+			_entries_container.add_child(ee)
+
+func create_editor_for_entry(entry : WebPageEntry) -> Control:
+	var c : Control = WebPageEntryEditor.instance() as Control
+	c.set_entry(entry, undo_redo)
+	return c
+
+func clear() -> void:
+	for i in range(_entries_container.get_child_count()):
+		_entries_container.get_child(i).queue_free()
+
+func add_entry(entry : WebPageEntry, after : WebPageEntry = null) -> void:
+	undo_redo.create_action("Added web page entry")
+	undo_redo.add_do_method(_page, "add_entry", entry, after)
+	undo_redo.add_undo_method(_page, "remove_entry", entry)
+	undo_redo.commit_action()
+
+func remove_entry(entry : WebPageEntry) -> void:
+	var after : WebPageEntry = _page.get_entry_before(entry)
+	
+	undo_redo.create_action("Added web page entry")
+	undo_redo.add_do_method(_page, "remove_entry", entry)
+	undo_redo.add_undo_method(_page, "add_entry", entry, after)
+	undo_redo.commit_action()
+	
+func move_entry_up(entry : WebPageEntry) -> void:
+	undo_redo.create_action("Added web page entry")
+	undo_redo.add_do_method(_page, "move_entry_up", entry)
+	undo_redo.add_undo_method(_page, "move_entry_down", entry)
+	undo_redo.commit_action()
+	
+func move_entry_down(entry : WebPageEntry) -> void:
+	undo_redo.create_action("Added web page entry")
+	undo_redo.add_do_method(_page, "move_entry_down", entry)
+	undo_redo.add_undo_method(_page, "move_entry_up", entry)
+	undo_redo.commit_action()
 
 func _notification(what):
 	if what == NOTIFICATION_INSTANCED:
@@ -28,7 +87,12 @@ func _notification(what):
 		_add_entry_popup = get_node("Popups/AddEntryPopup")
 		_add_entry_popup.connect("on_entry_class_selected", self, "_on_add_entry_class_selected")
 		
-		PageEditor = ResourceLoader.load("res://addons/web_pages/editor/PageEditor.tscn", "PackedScene") as PackedScene
+		_entries_container = get_node("MC/EntriesContainer/MainVB/Entries")
+		
+		var main_add_button : Button = get_node("MC/EntriesContainer/MainVB/MainAddButton")
+		main_add_button.connect("pressed", self, "_on_entry_add_requested")
+		
+		WebPageEntryEditor = ResourceLoader.load("res://addons/web_pages/editor/WebPageEntryEditor.tscn", "PackedScene") as PackedScene
 	elif what == NOTIFICATION_ENTER_TREE:
 		var wne : Control = Engine.get_global("WebNodeEditor")
 		if wne:
@@ -93,5 +157,34 @@ func _edited_node_changed(web_node : WebNode):
 			#add method to switch off to the prev screen
 			#wne.switch_to_main_screen_tab(self)
 
+func on_page_entries_changed() -> void:
+	recreate()
+
 func _on_add_entry_class_selected(cls_name : String) -> void:
-	print(cls_name)
+	var entry : WebPageEntry = null
+	
+	if cls_name == "WebPageEntryTitleText":
+		entry = WebPageEntryTitleText.new()
+		
+	if !entry:
+		PLogger.log_error("PageEditor: Couldn't create entry for: " + cls_name)
+		return
+		
+	add_entry(entry, _entry_add_after)
+	
+func _on_entry_add_requested() -> void:
+	_entry_add_after = null
+	_add_entry_popup.popup_centered()
+	
+func _on_entry_add_requested_after(entry) -> void:
+	_entry_add_after = entry
+	_add_entry_popup.popup_centered()
+
+func _on_entry_move_up_requested(entry) -> void:
+	move_entry_up(entry)
+	
+func _on_entry_move_down_requested(entry) -> void:
+	move_entry_down(entry)
+	
+func _on_entry_delete_requested(entry) -> void:
+	remove_entry(entry)
