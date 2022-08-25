@@ -1,0 +1,7 @@
+[gd_resource type="WebPermission" load_steps=2 format=2]
+
+[ext_resource path="res://web_perm_test/WebPermTest.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+permissions = 15
