@@ -3,6 +3,7 @@ extends WebNode
 class_name WebPage, "res://addons/web_pages/icons/icon_web_page.svg"
 
 export(bool) var sohuld_render_menu : bool = true
+export(bool) var allow_web_interface_editing : bool = false
 
 export(Array, Resource) var entries : Array
 
@@ -10,24 +11,186 @@ signal entries_changed()
 
 func _handle_request(request : WebServerRequest):
 	if request.get_remaining_segment_count() > 0:
+		if allow_web_interface_editing:
+			if web_editor_try_handle(request):
+				return
+			
 		for i in range(entries.size()):
 			var e : WebPageEntry = entries[i]
 			
 			if e && e.handle_request(request):
 				return
+				
+		request.send_error(404)
 
 	if sohuld_render_menu:
 		render_menu(request)
-		
+	
+	var should_render_edit_bar : bool = allow_web_interface_editing && (request.can_edit() || request.can_delete())
+
 	for i in range(entries.size()):
 		var e : WebPageEntry = entries[i]
 		
 		if e:
+			if should_render_edit_bar:
+				e.render_edit_bar(request)
+				
 			e.render(request)
 			
 	request.compile_and_send_body()
 
+func web_editor_try_handle(request : WebServerRequest) -> bool:
+	var path_segment : String = request.get_current_path_segment()
+	
+	if path_segment == "add":
+		return web_editor_handle_add(request)
+	elif path_segment == "edit":
+		return web_editor_handle_edit(request)
+	elif path_segment == "move_up":
+		return web_editor_handle_move_up(request)
+	elif path_segment == "move_down":
+		return web_editor_handle_move_down(request)
+	elif path_segment == "delete":
+		return web_editor_handle_delete(request)
+		
+	return false
+
+func web_editor_handle_add(request : WebServerRequest) -> bool:
+	if !request.can_create():
+		return false
+	
+	if request.get_method() == HTTPServerEnums.HTTP_METHOD_POST:
+		pass
+		
+	#render interface
+			
+	return true
+	
+func web_editor_handle_edit(request : WebServerRequest) -> bool:
+	if !request.can_edit():
+		return false
+		
+	if request.get_remaining_segment_count() < 1:
+		return false
+		
+	request.push_path()
+	
+	var resource_id_str : String = request.get_current_path_segment()
+	
+	if resource_id_str.empty() || !resource_id_str.is_valid_integer():
+		# Todo either change the docs that this now returns "", or change it to "/"
+		# not yet sure which one is better (empty is probably better)
+		request.send_error(404)
+		return true
+	
+	var resource_id : int = resource_id_str.to_int()
+	
+	var entry : WebPageEntry = get_entry_with_id(resource_id)
+	
+	if !entry:
+		request.send_error(404)
+		return true
+
+	#entry.handle_edit(request)
+	
+	return true
+
+func web_editor_handle_move_up(request : WebServerRequest) -> bool:
+	if !request.can_edit():
+		return false
+		
+	if request.get_remaining_segment_count() < 1:
+		return false
+		
+	request.push_path()
+	
+	var resource_id_str : String = request.get_current_path_segment()
+	
+	if resource_id_str.empty() || !resource_id_str.is_valid_integer():
+		# Todo either change the docs that this now returns "", or change it to "/"
+		# not yet sure which one is better (empty is probably better)
+		request.send_error(404)
+		return true
+	
+	var resource_id : int = resource_id_str.to_int()
+	
+	var entry : WebPageEntry = get_entry_with_id(resource_id)
+	
+	if !entry:
+		request.send_error(404)
+		return true
+
+	move_entry_up(entry)
+	#TODO binding missing 2nd default param
+	request.send_redirect(request.get_url_root_parent(1), HTTPServerEnums.HTTP_STATUS_CODE_302_FOUND)
+	return true
+	
+func web_editor_handle_move_down(request : WebServerRequest) -> bool:
+	if !request.can_edit():
+		return false
+		
+	if request.get_remaining_segment_count() < 1:
+		return false
+		
+	request.push_path()
+	
+	var resource_id_str : String = request.get_current_path_segment()
+	
+	if resource_id_str.empty() || !resource_id_str.is_valid_integer():
+		# Todo either change the docs that this now returns "", or change it to "/"
+		# not yet sure which one is better (empty is probably better)
+		request.send_error(404)
+		return true
+	
+	var resource_id : int = resource_id_str.to_int()
+	
+	var entry : WebPageEntry = get_entry_with_id(resource_id)
+	
+	if !entry:
+		request.send_error(404)
+		return true
+
+	move_entry_down(entry)
+	#TODO binding missing 2nd default param
+	request.send_redirect(request.get_url_root_parent(1), HTTPServerEnums.HTTP_STATUS_CODE_302_FOUND)
+	return true
+
+func web_editor_handle_delete(request : WebServerRequest) -> bool:
+	if !request.can_delete():
+		return false
+	
+	if request.get_remaining_segment_count() < 1:
+		return false
+	
+	request.push_path()
+	
+	var resource_index_str : String = request.get_current_path_segment()
+	
+	if resource_index_str.empty() || !resource_index_str.is_valid_integer():
+		return false
+	
+	if request.get_method() == HTTPServerEnums.HTTP_METHOD_POST:
+		pass
+		
+	#entry.handle_delete(request)
+			
+	return true
+
+func get_next_id() -> int:
+	var id : int = 0
+	for i in range(entries.size()):
+		var e : WebPageEntry = entries[i]
+		
+		if e:
+			if e.id > id:
+				id = e.id
+				
+	return id + 1
+
 func add_entry(var entry : WebPageEntry, var after : WebPageEntry = null) -> void:
+	var id : int = get_next_id()
+	entry.id = id
+	
 	if after != null:
 		for i in range(entries.size()):
 			if entries[i] == after:
@@ -37,6 +200,21 @@ func add_entry(var entry : WebPageEntry, var after : WebPageEntry = null) -> voi
 		entries.push_back(entry)
 		
 	emit_signal("entries_changed")
+
+func get_entry_with_index(index : int) -> WebPageEntry:
+	if index < 0 || index >= entries.size():
+		return null
+		
+	return entries[index]
+
+func get_entry_with_id(id : int) -> WebPageEntry:
+	for i in range(entries.size()):
+		var e : WebPageEntry = entries[i]
+		
+		if e && e.id == id:
+			return e
+	
+	return null
 
 func remove_entry(var entry : WebPageEntry) -> void:
 	entries.erase(entry)

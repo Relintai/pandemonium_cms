@@ -8,11 +8,13 @@
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 3 )
+id = 1
 text = "asdasdasd"
 hsize = 1
 
 [sub_resource type="Resource" id=4]
 script = ExtResource( 4 )
+id = 2
 text = "asdasd
 
 
@@ -26,6 +28,7 @@ A
 
 [sub_resource type="Resource" id=5]
 script = ExtResource( 5 )
+id = 3
 image_path = "res://test_img/icon.png"
 image_url = "img"
 alt = "Addalt"
@@ -33,11 +36,13 @@ image_size = Vector2i( 100, 100 )
 
 [sub_resource type="Resource" id=3]
 script = ExtResource( 3 )
+id = 4
 text = "rtrtrtrttrtA"
 hsize = 1
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 3 )
+id = 5
 text = "weqweqwe"
 hsize = 1
 
@@ -53,4 +58,5 @@ data = "<a href=\"/page\">Page</a>"
 [node name="page" type="WebNode" parent="WebRoot"]
 uri_segment = "page"
 script = ExtResource( 2 )
+allow_web_interface_editing = true
 entries = [ SubResource( 1 ), SubResource( 4 ), SubResource( 5 ), SubResource( 3 ), SubResource( 2 ) ]

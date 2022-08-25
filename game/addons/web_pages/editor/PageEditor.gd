@@ -181,11 +181,11 @@ func _on_add_entry_class_selected(cls_name : String) -> void:
 		entry = WebPageEntryText.new()
 	elif cls_name == "WebPageEntryImage":
 		entry = WebPageEntryImage.new()
-						
+	
 	if !entry:
 		PLogger.log_error("PageEditor: Couldn't create entry for: " + cls_name)
 		return
-		
+	
 	add_entry(entry, _entry_add_after)
 	
 func _on_entry_add_requested() -> void:
