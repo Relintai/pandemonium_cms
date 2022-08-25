@@ -17,7 +17,26 @@ func _handle_edit(request : WebServerRequest) -> void:
 		#should be ERR_FAIL_COND
 		return
 	
-	if request.get_method() == HTTPServerEnums.HTTP_METHOD_POST:
-		pass
-		
+	var b : HTMLBuilder = HTMLBuilder.new()
 	
+	if request.get_method() == HTTPServerEnums.HTTP_METHOD_POST:
+		text = request.get_parameter("text")
+		
+		#b.div().f().w("Save successful!").cdiv()
+		request.send_redirect(request.get_url_root_parent(2), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
+		
+	b.div().f().a(request.get_url_root_parent(2)).f().w("<-- back").ca().cdiv()
+	b.br()
+	
+	b.h1().f().w("Editing: Title Text").ch1()
+	b.br()
+
+	b.form_post(request.get_url_root())
+	b.csrf_tokenr(request)
+	b.label().fora("text").f().w("Text: ").clabel()
+	b.input_text("text", text, "", "", "text")
+	b.input_submit("Save")
+	b.cform()
+	
+	request.body += b.result
+	request.compile_and_send_body()
