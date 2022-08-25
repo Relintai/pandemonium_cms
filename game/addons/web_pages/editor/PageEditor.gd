@@ -12,6 +12,7 @@ var _entry_name_line_edit : LineEdit = null
 var _uri_segment_line_edit : LineEdit = null
 var _add_entry_popup : AcceptDialog = null
 var _entries_container : Control = null
+var _main_add_button : Button = null
 
 var _entry_add_after : WebPageEntry = null
 
@@ -34,6 +35,9 @@ func recreate() -> void:
 	create_editors()
 
 func create_editors() -> void:
+	if _page.entries.size() > 0:
+		_main_add_button.hide()
+	
 	for i in range(_page.entries.size()):
 		var e : WebPageEntry = _page.entries[i]
 		
@@ -44,9 +48,17 @@ func create_editors() -> void:
 func create_editor_for_entry(entry : WebPageEntry) -> Control:
 	var c : Control = WebPageEntryEditor.instance() as Control
 	c.set_entry(entry, undo_redo)
+	
+	c.connect("entry_add_requested_after", self, "_on_entry_add_requested_after")
+	c.connect("entry_move_up_requested", self, "_on_entry_move_up_requested")
+	c.connect("entry_move_down_requested", self, "_on_entry_move_down_requested")
+	c.connect("entry_delete_requested", self, "_on_entry_delete_requested")
+	
 	return c
 
 func clear() -> void:
+	_main_add_button.show()
+	
 	for i in range(_entries_container.get_child_count()):
 		_entries_container.get_child(i).queue_free()
 
@@ -89,8 +101,8 @@ func _notification(what):
 		
 		_entries_container = get_node("MC/EntriesContainer/MainVB/Entries")
 		
-		var main_add_button : Button = get_node("MC/EntriesContainer/MainVB/MainAddButton")
-		main_add_button.connect("pressed", self, "_on_entry_add_requested")
+		_main_add_button = get_node("MC/EntriesContainer/MainVB/MainAddButton")
+		_main_add_button.connect("pressed", self, "_on_entry_add_requested")
 		
 		WebPageEntryEditor = ResourceLoader.load("res://addons/web_pages/editor/WebPageEntryEditor.tscn", "PackedScene") as PackedScene
 	elif what == NOTIFICATION_ENTER_TREE:

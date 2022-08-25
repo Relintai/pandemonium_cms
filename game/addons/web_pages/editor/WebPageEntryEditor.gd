@@ -47,7 +47,7 @@ func _notification(what):
 		_entry_type_label = get_node("PC/VBC/TopBar/EntryTypeLabel")
 		_main_container = get_node("PC/VBC/MainContainer")
 		
-		get_node("AddButton").connect("pressed", self, "_on_add_button_pressed")
+		get_node("HBoxContainer/AddButton").connect("pressed", self, "_on_add_button_pressed")
 		get_node("PC/VBC/TopBar/UpButton").connect("pressed", self, "_on_up_button_pressed")
 		get_node("PC/VBC/TopBar/DownButton").connect("pressed", self, "_on_down_button_pressed")
 		get_node("PC/VBC/TopBar/Delete").connect("pressed", self, "_on_delete_button_pressed")

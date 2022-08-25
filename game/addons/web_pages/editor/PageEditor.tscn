@@ -69,7 +69,7 @@ size_flags_horizontal = 3
 [node name="MainAddButton" type="Button" parent="MC/EntriesContainer/MainVB"]
 margin_right = 1010.0
 margin_bottom = 20.0
-text = "Add (Bottom)"
+text = "Add"
 
 [node name="Entries" type="VBoxContainer" parent="MC/EntriesContainer/MainVB"]
 margin_top = 24.0
