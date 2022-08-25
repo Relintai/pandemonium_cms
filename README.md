@@ -7,7 +7,10 @@ With a similar design to my old cms ([CrystalCMS](https://github.com/Relintai/cr
 (eventually in-app) and web interface based use.
 
 The project itself resides in the games folder. Open that with the proper version of the pandemonium engine.
-([Engine's master entry in this file.](https://github.com/Relintai/pandemonium_cms/blob/master/HEADS))
+
+For now you can see the required engine commit hash in the [engine's master entry in this file.](https://github.com/Relintai/pandemonium_cms/blob/master/HEADS), 
+which you can use to get an executable from the engine's [github actions tab](https://github.com/Relintai/pandemonium_engine/actions), or you can 
+[compile](#compiling) it yourself.
 
 The current idea is that everything will be implemented as plugins, so they can be easily reused for different projects. THe main 
 
