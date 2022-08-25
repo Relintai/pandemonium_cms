@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://addons/web_pages/classes/WebPage.gd" type="Script" id=2]
@@ -7,11 +7,6 @@
 [sub_resource type="Resource" id=1]
 script = ExtResource( 3 )
 text = "asdasdasd"
-hsize = 1
-
-[sub_resource type="Resource" id=4]
-script = ExtResource( 3 )
-text = "rerer"
 hsize = 1
 
 [sub_resource type="Resource" id=3]
@@ -31,9 +26,9 @@ script = ExtResource( 1 )
 
 [node name="index" type="StaticWebPage" parent="WebRoot"]
 uri_segment = "/"
-data = "<a href=\"/blog\">Blog</a>"
+data = "<a href=\"/page\">Page</a>"
 
-[node name="Asdasd" type="WebNode" parent="WebRoot"]
-uri_segment = "asda"
+[node name="page" type="WebNode" parent="WebRoot"]
+uri_segment = "page"
 script = ExtResource( 2 )
-entries = [ SubResource( 1 ), SubResource( 4 ), SubResource( 3 ), SubResource( 2 ) ]
+entries = [ SubResource( 1 ), SubResource( 3 ), SubResource( 2 ) ]

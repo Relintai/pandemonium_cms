@@ -2,9 +2,23 @@ tool
 extends WebNode
 class_name WebPage, "res://addons/web_pages/icons/icon_web_page.svg"
 
+export(bool) var sohuld_render_menu : bool = true
+
 export(Array, Resource) var entries : Array
 
 signal entries_changed()
+
+func _handle_request(request : WebServerRequest):
+	if sohuld_render_menu:
+		render_menu(request)
+		
+	for i in range(entries.size()):
+		var e : WebPageEntry = entries[i]
+		
+		if e:
+			e.render(request)
+			
+	request.compile_and_send_body()
 
 func add_entry(var entry : WebPageEntry, var after : WebPageEntry = null) -> void:
 	if after != null:
