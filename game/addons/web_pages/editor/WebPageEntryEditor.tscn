@@ -51,10 +51,15 @@ margin_top = 24.0
 margin_right = 1010.0
 margin_bottom = 38.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HSeparator2" type="HSeparator" parent="."]
 margin_top = 56.0
 margin_right = 1024.0
-margin_bottom = 76.0
+margin_bottom = 60.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_top = 64.0
+margin_right = 1024.0
+margin_bottom = 84.0
 alignment = 1
 
 [node name="AddButton" type="Button" parent="HBoxContainer"]
@@ -62,3 +67,8 @@ margin_left = 471.0
 margin_right = 553.0
 margin_bottom = 20.0
 text = "+ Add here"
+
+[node name="HSeparator" type="HSeparator" parent="."]
+margin_top = 88.0
+margin_right = 1024.0
+margin_bottom = 92.0
