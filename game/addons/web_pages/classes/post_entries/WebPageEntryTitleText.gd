@@ -11,3 +11,13 @@ func _render(request : WebServerRequest):
 func get_page_entry_class_name() -> String:
 	return "WebPageEntryTitleText"
 	
+func _handle_edit(request : WebServerRequest) -> void:
+	if !request.can_edit():
+		# TODO add error macro like methods to global scope for scripting (to the engine)
+		#should be ERR_FAIL_COND
+		return
+	
+	if request.get_method() == HTTPServerEnums.HTTP_METHOD_POST:
+		pass
+		
+	

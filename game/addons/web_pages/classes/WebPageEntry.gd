@@ -16,6 +16,12 @@ func render(request : WebServerRequest):
 func _render(request : WebServerRequest):
 	pass
 
+func handle_edit(request : WebServerRequest) -> void:
+	_handle_edit(request)
+	
+func _handle_edit(request : WebServerRequest) -> void:
+	return
+
 func render_edit_bar(request : WebServerRequest) -> void:
 	_render_edit_bar(request)
 

@@ -84,7 +84,7 @@ func web_editor_handle_add(request : WebServerRequest) -> bool:
 			
 			if entry:
 				add_entry(entry)
-				request.send_redirect(request.get_url_root(), HTTPServerEnums.HTTP_STATUS_CODE_304_NOT_MODIFIED)
+				request.send_redirect(request.get_url_root(), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
 				return true
 			else:
 				request.body += "<div>Error processing your request!</div>"
@@ -150,7 +150,8 @@ func web_editor_handle_edit(request : WebServerRequest) -> bool:
 		request.send_error(404)
 		return true
 
-	#entry.handle_edit(request)
+	request.push_path()
+	entry.handle_edit(request)
 	
 	return true
 
@@ -181,7 +182,7 @@ func web_editor_handle_move_up(request : WebServerRequest) -> bool:
 
 	move_entry_up(entry)
 	#TODO binding missing 2nd default param
-	request.send_redirect(request.get_url_root_parent(1), HTTPServerEnums.HTTP_STATUS_CODE_302_FOUND)
+	request.send_redirect(request.get_url_root_parent(1), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
 	return true
 	
 func web_editor_handle_move_down(request : WebServerRequest) -> bool:
@@ -211,7 +212,7 @@ func web_editor_handle_move_down(request : WebServerRequest) -> bool:
 
 	move_entry_down(entry)
 	#TODO binding missing 2nd default param
-	request.send_redirect(request.get_url_root_parent(1), HTTPServerEnums.HTTP_STATUS_CODE_302_FOUND)
+	request.send_redirect(request.get_url_root_parent(1), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
 	return true
 
 func web_editor_handle_delete(request : WebServerRequest) -> bool:
@@ -230,7 +231,7 @@ func web_editor_handle_delete(request : WebServerRequest) -> bool:
 		return true
 	
 	var resource_id : int = resource_id_str.to_int()
-		
+	
 	var entry : WebPageEntry = get_entry_with_id(resource_id)
 	
 	if !entry:
@@ -242,7 +243,7 @@ func web_editor_handle_delete(request : WebServerRequest) -> bool:
 		
 		if accept == "TRUE":
 			remove_entry(entry)
-			request.send_redirect(request.get_url_root(), HTTPServerEnums.HTTP_STATUS_CODE_304_NOT_MODIFIED)
+			request.send_redirect(request.get_url_root_parent(), HTTPServerEnums.HTTP_STATUS_CODE_303_SEE_OTHER)
 			return true
 		else:
 			request.body += "<div>Error processing your request!</div>"
@@ -305,9 +306,10 @@ func get_entry_with_index(index : int) -> WebPageEntry:
 func get_entry_with_id(id : int) -> WebPageEntry:
 	for i in range(entries.size()):
 		var e : WebPageEntry = entries[i]
-		
-		if e && e.id == id:
-			return e
+
+		if e:
+			if (e.id == id):
+				return e
 	
 	return null
 
