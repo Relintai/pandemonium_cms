@@ -1,45 +1,34 @@
 tool
-extends VBoxContainer
+extends PanelContainer
+
+var PageEditor : PackedScene = null
 
 var _wne_tool_bar_button : Button = null
 
 var _page : WebPage = null
 var undo_redo : UndoRedo = null
 
+var _entry_name_line_edit : LineEdit = null
+var _uri_segment_line_edit : LineEdit = null
+var _add_entry_popup : AcceptDialog = null
+
 func set_page(page : WebPage):
 	_page = page
-	get_node("Name/PostNameLE").text = page.name
-	get_node("URISegment/URISegmentLE").text = page.uri_segment
-#	name = page.name
-	
-func _on_pageNameLE_text_entered(new_text : String):
-	var le : LineEdit = get_node("Name/PostNameLE")
-	
-	undo_redo.create_action("Page name changed.")
-	undo_redo.add_do_property(_page, "name", new_text)
-	undo_redo.add_undo_property(_page, "name", _page.name)
-	undo_redo.add_do_property(le, "text", new_text)
-	undo_redo.add_undo_property(le, "text", _page.name)
-	undo_redo.add_do_property(self, "name", new_text)
-	undo_redo.add_undo_property(self, "name", _page.name)
-	undo_redo.commit_action()
-
-func _on_URISegmentLE_text_entered(new_text : String):
-	var le : LineEdit = get_node("URISegment/URISegmentLE")
-	
-	undo_redo.create_action("Page uri segment changed.")
-	undo_redo.add_do_property(_page, "uri_segment", new_text)
-	undo_redo.add_undo_property(_page, "uri_segment", _page.uri_segment)
-	undo_redo.add_do_property(le, "text", new_text)
-	undo_redo.add_undo_property(le, "text", _page.uri_segment)
-	undo_redo.commit_action()
+	_entry_name_line_edit.text = page.name
+	_uri_segment_line_edit.text = page.uri_segment
 
 func _notification(what):
 	if what == NOTIFICATION_INSTANCED:
-		var le : LineEdit = get_node("Name/PostNameLE")
-		le.connect("text_entered", self, "_on_pageNameLE_text_entered")
-		var USle : LineEdit = get_node("URISegment/URISegmentLE")
-		USle.connect("text_entered", self, "_on_URISegmentLE_text_entered")
+		_entry_name_line_edit = get_node("MC/Name/EntryNameLineEdit")
+		_entry_name_line_edit.connect("text_entered", self, "_on_entry_name_line_edit_text_entered")
+		
+		_uri_segment_line_edit = get_node("MC/URISegment/URISegmentLE")
+		_uri_segment_line_edit.connect("text_entered", self, "_on_uri_segment_line_edit_text_entered")
+		
+		_add_entry_popup = get_node("Popups/AddEntryPopup")
+		_add_entry_popup.connect("on_entry_class_selected", self, "_on_add_entry_class_selected")
+		
+		PageEditor = ResourceLoader.load("res://addons/web_pages/editor/PageEditor.tscn", "PackedScene") as PackedScene
 	elif what == NOTIFICATION_ENTER_TREE:
 		var wne : Control = Engine.get_global("WebNodeEditor")
 		if wne:
@@ -60,7 +49,24 @@ func _notification(what):
 		var wne : Control = Engine.get_global("WebNodeEditor")
 		if wne:
 			wne.disconnect("edited_node_changed", self, "_edited_node_changed")
+	
+func _on_entry_name_line_edit_text_entered(new_text : String):
+	undo_redo.create_action("Page name changed.")
+	undo_redo.add_do_property(_page, "name", new_text)
+	undo_redo.add_undo_property(_page, "name", _page.name)
+	undo_redo.add_do_property(_entry_name_line_edit, "text", new_text)
+	undo_redo.add_undo_property(_entry_name_line_edit, "text", _page.name)
+	undo_redo.add_do_property(self, "name", new_text)
+	undo_redo.add_undo_property(self, "name", _page.name)
+	undo_redo.commit_action()
 
+func _on_uri_segment_line_edit_text_entered(new_text : String):
+	undo_redo.create_action("Page uri segment changed.")
+	undo_redo.add_do_property(_page, "uri_segment", new_text)
+	undo_redo.add_undo_property(_page, "uri_segment", _page.uri_segment)
+	undo_redo.add_do_property(_uri_segment_line_edit, "text", new_text)
+	undo_redo.add_undo_property(_uri_segment_line_edit, "text", _page.uri_segment)
+	undo_redo.commit_action()
 
 func _on_blog_editor_button_toggled(on):
 	if on:
@@ -87,3 +93,5 @@ func _edited_node_changed(web_node : WebNode):
 			#add method to switch off to the prev screen
 			#wne.switch_to_main_screen_tab(self)
 
+func _on_add_entry_class_selected(cls_name : String) -> void:
+	print(cls_name)
