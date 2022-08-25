@@ -3,30 +3,43 @@ extends VBoxContainer
 
 var _wne_tool_bar_button : Button = null
 
-var _post : WebPage = null
+var _page : WebPage = null
 var undo_redo : UndoRedo = null
 
-func set_post(post : WebPage):
-	_post = post
-	get_node("HBoxContainer/PostNameLE").text = post.name
-	name = post.name
+func set_page(page : WebPage):
+	_page = page
+	get_node("Name/PostNameLE").text = page.name
+	get_node("URISegment/URISegmentLE").text = page.uri_segment
+#	name = page.name
 	
-func _on_PostNameLE_text_entered(new_text : String):
-	var le : LineEdit = get_node("HBoxContainer/PostNameLE")
+func _on_pageNameLE_text_entered(new_text : String):
+	var le : LineEdit = get_node("Name/PostNameLE")
 	
-	undo_redo.create_action("Post name changed.")
-	undo_redo.add_do_property(_post, "name", new_text)
-	undo_redo.add_undo_property(_post, "name", _post.name)
+	undo_redo.create_action("Page name changed.")
+	undo_redo.add_do_property(_page, "name", new_text)
+	undo_redo.add_undo_property(_page, "name", _page.name)
 	undo_redo.add_do_property(le, "text", new_text)
-	undo_redo.add_undo_property(le, "text", _post.name)
+	undo_redo.add_undo_property(le, "text", _page.name)
 	undo_redo.add_do_property(self, "name", new_text)
-	undo_redo.add_undo_property(self, "name", _post.name)
+	undo_redo.add_undo_property(self, "name", _page.name)
+	undo_redo.commit_action()
+
+func _on_URISegmentLE_text_entered(new_text : String):
+	var le : LineEdit = get_node("URISegment/URISegmentLE")
+	
+	undo_redo.create_action("Page uri segment changed.")
+	undo_redo.add_do_property(_page, "uri_segment", new_text)
+	undo_redo.add_undo_property(_page, "uri_segment", _page.uri_segment)
+	undo_redo.add_do_property(le, "text", new_text)
+	undo_redo.add_undo_property(le, "text", _page.uri_segment)
 	undo_redo.commit_action()
 
 func _notification(what):
 	if what == NOTIFICATION_INSTANCED:
-		var le : LineEdit = get_node("HBoxContainer/PostNameLE")
-		le.connect("text_entered", self, "_on_PostNameLE_text_entered")
+		var le : LineEdit = get_node("Name/PostNameLE")
+		le.connect("text_entered", self, "_on_pageNameLE_text_entered")
+		var USle : LineEdit = get_node("URISegment/URISegmentLE")
+		USle.connect("text_entered", self, "_on_URISegmentLE_text_entered")
 	elif what == NOTIFICATION_ENTER_TREE:
 		var wne : Control = Engine.get_global("WebNodeEditor")
 		if wne:
@@ -63,13 +76,14 @@ func _edited_node_changed(web_node : WebNode):
 	var wne : Control = Engine.get_global("WebNodeEditor")
 	if wne:
 		if web_node is WebPage:
-			_post = web_node
+			set_page(web_node)
+			#_page = web_node
 			_wne_tool_bar_button.show()
 			_wne_tool_bar_button.pressed = true
 			#wne.switch_to_main_screen_tab(self)
 		else:
 			_wne_tool_bar_button.hide()
-			#_post = null
+			#_page = null
 			#add method to switch off to the prev screen
 			#wne.switch_to_main_screen_tab(self)
 

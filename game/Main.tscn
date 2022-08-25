@@ -13,4 +13,5 @@ uri_segment = "/"
 data = "<a href=\"/blog\">Blog</a>"
 
 [node name="Asdasd" type="WebNode" parent="WebRoot"]
+uri_segment = "asda"
 script = ExtResource( 2 )
