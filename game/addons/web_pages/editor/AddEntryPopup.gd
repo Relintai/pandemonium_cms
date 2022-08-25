@@ -12,7 +12,12 @@ func _notification(what):
 			
 			get_ok().set_text("Close")
 			get_node("VBC/AddTitleTextButton").connect("pressed", self, "_add_title_text_button_pressed")
+			get_node("VBC/AddTextButton").connect("pressed", self, "_add_text_button_pressed")
 		
 func _add_title_text_button_pressed() -> void:
 	emit_signal("on_entry_class_selected" , "WebPageEntryTitleText")
+	hide()
+
+func _add_text_button_pressed() -> void:
+	emit_signal("on_entry_class_selected" , "WebPageEntryText")
 	hide()

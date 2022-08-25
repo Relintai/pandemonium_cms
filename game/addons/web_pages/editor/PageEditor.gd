@@ -177,7 +177,9 @@ func _on_add_entry_class_selected(cls_name : String) -> void:
 	
 	if cls_name == "WebPageEntryTitleText":
 		entry = WebPageEntryTitleText.new()
-		
+	elif cls_name == "WebPageEntryText":
+		entry = WebPageEntryText.new()
+				
 	if !entry:
 		PLogger.log_error("PageEditor: Couldn't create entry for: " + cls_name)
 		return

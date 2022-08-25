@@ -10,4 +10,4 @@ func _render(request : WebServerRequest):
 
 func get_page_entry_class_name() -> String:
 	return "WebPageEntryTitleText"
-
+	
