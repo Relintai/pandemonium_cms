@@ -5,7 +5,7 @@
    width="16"
    version="1.1"
    id="svg4"
-   sodipodi:docname="icon_web_blog.svg"
+   sodipodi:docname="icon_web_page_entry_text.svg"
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -24,11 +24,11 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="27.15625"
-     inkscape:cx="-0.64441887"
-     inkscape:cy="8.1749137"
+     inkscape:cx="-2.0437284"
+     inkscape:cy="8.2117376"
      inkscape:window-width="1920"
      inkscape:window-height="1023"
-     inkscape:window-x="3840"
+     inkscape:window-x="1920"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg4" />
@@ -61,8 +61,8 @@
        id="path295" />
   </g>
   <path
-     d="M 5.0978553,5.5089532 V 6.8952517 H 6.484154 V 5.5089532 Z m 2.079448,0 V 6.8952517 H 8.5636018 V 5.5089532 Z m 2.772597,0 V 6.8952517 H 14.108797 V 5.5089532 Z M 5.0978553,7.5884011 V 8.9746999 H 6.484154 V 7.5884011 Z m 2.079448,0 V 8.9746999 H 8.5636018 V 7.5884011 Z m 2.772597,0 V 9.6678499 H 13.415646 V 13.826745 H 9.9499003 v 1.386299 h 3.4657457 a 1.3862987,1.3862987 0 0 0 1.386299,-1.386299 V 7.5884011 Z M 10.64305,8.2815504 h 0.693149 V 8.9746999 H 10.64305 Z m 2.079448,0 h 0.693148 V 8.9746999 H 12.722498 Z M 5.0978553,9.6678499 V 11.054149 H 6.484154 V 9.6678499 Z m 2.079448,0 V 11.054149 H 8.5636018 V 9.6678499 Z m 2.772597,0.6931481 v 0.693151 h 1.3862987 v -0.693151 z m -4.852045,1.386299 v 1.386299 H 6.484154 v -1.386299 z m 2.079448,0 v 1.386299 h 1.3862985 v -1.386299 z m -2.079448,2.079448 v 1.386299 H 6.484154 v -1.386299 z m 2.079448,0 v 1.386299 h 1.3862985 v -1.386299 z"
+     d="M 5.1404171,5.3093141 V 6.9732584 H 6.8043614 V 5.3093141 Z m 3.3278886,0 V 6.9732584 H 15.124083 V 5.3093141 Z M 5.1404171,9.4691749 V 11.133119 H 6.8043614 V 9.4691749 Z m 3.3278886,0 V 11.133119 H 15.124083 V 9.4691749 Z M 5.1404171,13.629036 v 1.663944 h 1.6639443 v -1.663944 z m 3.3278886,0 v 1.663944 h 6.6557773 v -1.663944 z"
      fill="#e0e0e0"
-     id="path134"
-     style="fill:#9e3eed;fill-opacity:1;stroke-width:0.693149" />
+     id="path135"
+     style="stroke-width:0.831972;fill:#9e3eed;fill-opacity:1" />
 </svg>
