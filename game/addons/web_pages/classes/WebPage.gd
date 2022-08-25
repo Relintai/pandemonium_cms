@@ -9,6 +9,8 @@ export(Array, Resource) var entries : Array
 
 signal entries_changed()
 
+#TODO fix webperm assign
+
 func _handle_request(request : WebServerRequest):
 	if request.get_remaining_segment_count() > 0:
 		if allow_web_interface_editing:
@@ -36,7 +38,15 @@ func _handle_request(request : WebServerRequest):
 				e.render_edit_bar(request)
 				
 			e.render(request)
-			
+	
+	if request.can_create():
+		var b : HTMLBuilder = HTMLBuilder.new()
+		
+		b.div()
+		b.a(request.get_url_root_add("add")).f().w("+ Add New").ca()
+		b.cdiv()
+		request.body += b.result
+	
 	request.compile_and_send_body()
 
 func web_editor_try_handle(request : WebServerRequest) -> bool:
@@ -58,12 +68,61 @@ func web_editor_try_handle(request : WebServerRequest) -> bool:
 func web_editor_handle_add(request : WebServerRequest) -> bool:
 	if !request.can_create():
 		return false
-	
+
 	if request.get_method() == HTTPServerEnums.HTTP_METHOD_POST:
-		pass
+		var t : String = request.get_parameter("type")
 		
-	#render interface
+		var entry : WebPageEntry = null
+		
+		if !t.empty():
+			if t == "title_text":
+				entry = WebPageEntryTitleText.new()
+			elif t == "text":
+				entry = WebPageEntryText.new()
+			elif t == "image":
+				entry = WebPageEntryImage.new()
 			
+			if entry:
+				add_entry(entry)
+				request.send_redirect(request.get_url_root(), HTTPServerEnums.HTTP_STATUS_CODE_304_NOT_MODIFIED)
+				return true
+			else:
+				request.body += "<div>Error processing your request!</div>"
+		else:
+			request.body += "<div>Error processing your request!</div>"
+		
+	
+	if sohuld_render_menu:
+		render_menu(request)
+	
+	var b : HTMLBuilder = HTMLBuilder.new()
+	
+	b.div()
+	
+	if true:
+		b.form_post(request.get_url_root_current())
+		b.csrf_tokenr(request)
+		b.input_hidden("type", "title_text")
+		b.input_submit("Create Title Text")
+		b.cform()
+		
+		b.form_post(request.get_url_root_current())
+		b.csrf_tokenr(request)
+		b.input_hidden("type", "text")
+		b.input_submit("Create Text")
+		b.cform()
+		
+		b.form_post(request.get_url_root_current())
+		b.csrf_tokenr(request)
+		b.input_hidden("type", "image")
+		b.input_submit("Create Image")
+		b.cform()
+	
+	b.cdiv()
+	
+	request.body += b.result
+	request.compile_and_send_body()
+	
 	return true
 	
 func web_editor_handle_edit(request : WebServerRequest) -> bool:
@@ -164,15 +223,51 @@ func web_editor_handle_delete(request : WebServerRequest) -> bool:
 	
 	request.push_path()
 	
-	var resource_index_str : String = request.get_current_path_segment()
+	var resource_id_str : String = request.get_current_path_segment()
 	
-	if resource_index_str.empty() || !resource_index_str.is_valid_integer():
-		return false
+	if resource_id_str.empty() || !resource_id_str.is_valid_integer():
+		request.send_error(404)
+		return true
+	
+	var resource_id : int = resource_id_str.to_int()
+		
+	var entry : WebPageEntry = get_entry_with_id(resource_id)
+	
+	if !entry:
+		request.send_error(404)
+		return true
 	
 	if request.get_method() == HTTPServerEnums.HTTP_METHOD_POST:
-		pass
+		var accept : String = request.get_parameter("accept")
 		
-	#entry.handle_delete(request)
+		if accept == "TRUE":
+			remove_entry(entry)
+			request.send_redirect(request.get_url_root(), HTTPServerEnums.HTTP_STATUS_CODE_304_NOT_MODIFIED)
+			return true
+		else:
+			request.body += "<div>Error processing your request!</div>"
+		
+	if sohuld_render_menu:
+		render_menu(request)
+	
+	var b : HTMLBuilder = HTMLBuilder.new()
+	
+	b.div()
+	
+	if true:
+		entry.render(request)
+		
+		b.form_post(request.get_url_root_current())
+		b.w("Are you sure you want to delete?")
+		b.csrf_tokenr(request)
+		b.input_hidden("accept", "TRUE")
+		b.input_submit("Delete")
+		b.cform()
+	
+	b.cdiv()
+	
+	request.body += b.result
+	request.compile_and_send_body()
 			
 	return true
 
