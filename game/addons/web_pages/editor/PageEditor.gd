@@ -31,8 +31,7 @@ func _notification(what):
 		var wne : Control = Engine.get_global("WebNodeEditor")
 		if wne:
 			_wne_tool_bar_button = Button.new()
-			_wne_tool_bar_button.set_text("Blog Editor")
-			_wne_tool_bar_button.set_tooltip("HTML preview")
+			_wne_tool_bar_button.set_text("Web Page Editor")
 			_wne_tool_bar_button.set_toggle_mode(true)
 			_wne_tool_bar_button.set_pressed(false)
 			_wne_tool_bar_button.set_button_group(wne.get_main_button_group())
@@ -40,7 +39,6 @@ func _notification(what):
 			wne.add_control_to_tool_bar(_wne_tool_bar_button)
 			_wne_tool_bar_button.connect("toggled", self, "_on_blog_editor_button_toggled")
 			wne.connect("edited_node_changed", self, "_edited_node_changed")
-			
 	elif what == NOTIFICATION_EXIT_TREE:
 		if _wne_tool_bar_button:
 			_wne_tool_bar_button.queue_free()
