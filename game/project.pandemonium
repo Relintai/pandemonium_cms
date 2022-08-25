@@ -33,7 +33,7 @@ _global_script_class_icons={
 @"WebPage": "res://addons/web_pages/icons/icon_web_page.svg",
 @"WebPageEntryTitleText": "res://addons/web_pages/icons/icon_web_page_entry_title_text.svg",
 @"WebPageEntry": "res://addons/web_pages/icons/icon_web_page_entry.svg",
-@"WebPageList": "res://addons/web_pages/icons/icon_web_page_list.svg"
+@"WebPageList": "res://addons/web_page_list/icons/icon_web_page_list.svg"
 }
 
 [application]

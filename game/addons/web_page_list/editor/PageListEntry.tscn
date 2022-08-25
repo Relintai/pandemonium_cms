@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://addons/web_pages/editor/PageListEntry.gd" type="Script" id=1]
+[ext_resource path="res://addons/web_page_list/editor/PageListEntry.gd" type="Script" id=1]
 
 [node name="PostEntry" type="PanelContainer"]
 margin_right = 1016.0

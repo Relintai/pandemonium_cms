@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/web_pages/editor/WebPageListEditor.gd" type="Script" id=1]
-[ext_resource path="res://addons/web_pages/editor/Posts.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/web_page_list/editor/WebPageListEditor.gd" type="Script" id=1]
+[ext_resource path="res://addons/web_page_list/editor/Pages.tscn" type="PackedScene" id=2]
 
-[node name="WebBlogEditor" type="PanelContainer"]
+[node name="WebPostListEditor" type="PanelContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
@@ -16,6 +16,6 @@ margin_bottom = 593.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Posts" parent="Tabs" instance=ExtResource( 3 )]
+[node name="Posts" parent="Tabs" instance=ExtResource( 2 )]
 size_flags_horizontal = 3
 size_flags_vertical = 3

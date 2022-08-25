@@ -1,6 +1,6 @@
 tool
 extends WebNode
-class_name WebPageList, "res://addons/web_pages/icons/icon_web_page_list.svg"
+class_name WebPageList, "res://addons/web_page_list/icons/icon_web_page_list.svg"
 
 func add_post(post : WebPage) -> void:
 	if (get_child_count() > 0):
