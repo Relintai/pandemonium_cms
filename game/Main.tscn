@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://addons/web_pages/classes/WebPage.gd" type="Script" id=2]
 [ext_resource path="res://addons/web_pages/classes/post_entries/WebPageEntryTitleText.gd" type="Script" id=3]
 [ext_resource path="res://addons/web_pages/classes/post_entries/WebPageEntryText.gd" type="Script" id=4]
+[ext_resource path="res://addons/web_pages/classes/post_entries/WebPageEntryImage.gd" type="Script" id=5]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 3 )
@@ -20,7 +21,15 @@ asda
 TEST
 
 
-A"
+A
+"
+
+[sub_resource type="Resource" id=5]
+script = ExtResource( 5 )
+image_path = "res://test_img/icon.png"
+image_url = "img"
+alt = "Addalt"
+image_size = Vector2i( 100, 100 )
 
 [sub_resource type="Resource" id=3]
 script = ExtResource( 3 )
@@ -44,4 +53,4 @@ data = "<a href=\"/page\">Page</a>"
 [node name="page" type="WebNode" parent="WebRoot"]
 uri_segment = "page"
 script = ExtResource( 2 )
-entries = [ SubResource( 1 ), SubResource( 4 ), SubResource( 3 ), SubResource( 2 ) ]
+entries = [ SubResource( 1 ), SubResource( 4 ), SubResource( 5 ), SubResource( 3 ), SubResource( 2 ) ]

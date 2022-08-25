@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://addons/web_pages/classes/WebPageEntry.gd"
 }, {
 "base": "Resource",
+"class": @"WebPageEntryImage",
+"language": @"GDScript",
+"path": "res://addons/web_pages/classes/post_entries/WebPageEntryImage.gd"
+}, {
+"base": "Resource",
 "class": @"WebPageEntryText",
 "language": @"GDScript",
 "path": "res://addons/web_pages/classes/post_entries/WebPageEntryText.gd"
@@ -39,6 +44,7 @@ _global_script_class_icons={
 @"WebPageEntryTitleText": "",
 @"WebPageEntry": "res://addons/web_pages/icons/icon_web_page_entry.svg",
 @"WebPageList": "res://addons/web_page_list/icons/icon_web_page_list.svg",
+@"WebPageEntryImage": "res://addons/web_pages/icons/icon_web_page_entry_image.svg",
 @"WebPageEntryText": "res://addons/web_pages/icons/icon_web_page_entry_text.svg"
 }
 

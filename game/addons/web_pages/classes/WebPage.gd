@@ -9,6 +9,13 @@ export(Array, Resource) var entries : Array
 signal entries_changed()
 
 func _handle_request(request : WebServerRequest):
+	if request.get_remaining_segment_count() > 0:
+		for i in range(entries.size()):
+			var e : WebPageEntry = entries[i]
+			
+			if e && e.handle_request(request):
+				return
+
 	if sohuld_render_menu:
 		render_menu(request)
 		

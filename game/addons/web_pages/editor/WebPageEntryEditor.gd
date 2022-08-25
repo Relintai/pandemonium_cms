@@ -10,6 +10,7 @@ var _editor : Control = null
 
 var WebPageEntryTitleTextEditor : PackedScene = null
 var WebPageEntryTextEditor : PackedScene = null
+var WebPageEntryImageEditor : PackedScene = null
 
 signal entry_add_requested_after(entry)
 signal entry_move_up_requested(entry)
@@ -26,6 +27,8 @@ func set_entry(entry : WebPageEntry, undo_redo : UndoRedo) -> void:
 		_editor = WebPageEntryTitleTextEditor.instance()
 	elif cls == "WebPageEntryText":
 		_editor = WebPageEntryTextEditor.instance()
+	elif cls == "WebPageEntryImage":
+		_editor = WebPageEntryImageEditor.instance()
 		
 	if _editor:
 		_editor.set_entry(entry, undo_redo)
@@ -47,6 +50,7 @@ func _notification(what):
 	if what == NOTIFICATION_INSTANCED:
 		WebPageEntryTitleTextEditor = ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryTitleTextEditor.tscn", "PackedScene")
 		WebPageEntryTextEditor = ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryTextEditor.tscn", "PackedScene")
+		WebPageEntryImageEditor = ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryImageEditor.tscn", "PackedScene")
 		
 		_entry_type_label = get_node("PC/VBC/TopBar/EntryTypeLabel")
 		_main_container = get_node("PC/VBC/MainContainer")

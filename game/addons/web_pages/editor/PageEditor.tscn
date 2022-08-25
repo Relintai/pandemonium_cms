@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/web_pages/editor/PageEditor.gd" type="Script" id=1]
 [ext_resource path="res://addons/web_pages/icons/icon_web_page_entry_title_text.svg" type="Texture" id=2]
 [ext_resource path="res://addons/web_pages/editor/AddEntryPopup.gd" type="Script" id=3]
 [ext_resource path="res://addons/web_pages/icons/icon_web_page_entry_text.svg" type="Texture" id=4]
+[ext_resource path="res://addons/web_pages/icons/icon_web_page_entry_image.svg" type="Texture" id=5]
 
 [node name="PostEditor" type="PanelContainer"]
 anchor_right = 1.0
@@ -100,7 +101,7 @@ script = ExtResource( 3 )
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 192.0
-margin_bottom = 56.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -116,3 +117,10 @@ margin_right = 184.0
 margin_bottom = 48.0
 text = "Text"
 icon = ExtResource( 4 )
+
+[node name="AddimageButton" type="Button" parent="Popups/AddEntryPopup/VBC"]
+margin_top = 52.0
+margin_right = 184.0
+margin_bottom = 74.0
+text = "Image"
+icon = ExtResource( 5 )
