@@ -6,17 +6,17 @@
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 3 )
-text = ""
+text = "asdasdasd"
 hsize = 1
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 3 )
-text = ""
+text = "weqweqwe"
 hsize = 1
 
 [sub_resource type="Resource" id=3]
 script = ExtResource( 3 )
-text = ""
+text = "rtrtrtrttrtA"
 hsize = 1
 
 [node name="WebServer" type="WebServerSimple"]

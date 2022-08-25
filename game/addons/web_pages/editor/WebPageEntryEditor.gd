@@ -18,15 +18,14 @@ signal entry_delete_requested(entry)
 func set_entry(entry : WebPageEntry, undo_redo : UndoRedo) -> void:
 	_entry = entry
 	
-	var cls : String = entry.get_class()
+	var cls : String = entry.get_page_entry_class_name()
 	_entry_type_label.text = cls
 	
 	if cls == "WebPageEntryTitleText":
 		_editor = WebPageEntryTitleTextEditor.instance()
 		
 	if _editor:
-		_editor.undo_redo = undo_redo
-		_editor.set_entry(entry)
+		_editor.set_entry(entry, undo_redo)
 		_main_container.add_child(_editor)
 
 func _on_add_button_pressed():
