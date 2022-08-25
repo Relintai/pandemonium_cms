@@ -6,15 +6,15 @@ An experimantal CMS (Web Content Management System) using the [Pandemonium Engin
 With a similar design to my old cms ([CrystalCMS](https://github.com/Relintai/crystal_cms)), except with adapted content creation workflow for both in-editor 
 (eventually in-app) and web interface based use.
 
-The project itself resides in the games folder. Open that with the proper version of the pandemonium engine.
+The project itself resides in the game folder. Open that with the proper version of the pandemonium engine.
 
-For now you can see the required engine commit hash in the [engine's master entry in this file.](https://github.com/Relintai/pandemonium_cms/blob/master/HEADS), 
+For now you can see the required engine commit hash in the [engine's master entry in this file](https://github.com/Relintai/pandemonium_cms/blob/master/HEADS), 
 which you can use to get an executable from the engine's [github actions tab](https://github.com/Relintai/pandemonium_engine/actions), or you can 
 [compile](#compiling) it yourself.
 
-The current idea is that everything will be implemented as plugins, so they can be easily reused for different projects. THe main 
+The current idea is that everything will be implemented as plugins, so they can be easily reused for different projects.
 
-When it gets mature enough (and is worth having) it will probably be turned into an (or multiple) c++ engine module(s).
+When it gets mature enough (and is worth having) it will probably be turned into one (or multiple) c++ engine module(s).
 
 ## Project overview
 
