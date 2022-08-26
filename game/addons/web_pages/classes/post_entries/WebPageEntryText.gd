@@ -16,19 +16,21 @@ func set_text(t : String) -> void:
 func _render(request : WebServerRequest):
 	request.body += compiled_text
 
-func _handle_edit(request : WebServerRequest) -> void:
+func _handle_edit(request : WebServerRequest) -> WebPageEntry:
 	if !request.can_edit():
 		#should be ERR_FAIL_COND
-		return
+		return null
 	
 	var b : HTMLBuilder = HTMLBuilder.new()
 	
 	if request.get_method() == HTTPServerEnums.HTTP_METHOD_POST:
-		set_text(request.get_parameter("text"))
+		var e : WebPageEntry = duplicate()
 		
-		#b.div().f().w("Save successful!").cdiv()
-		emit_changed()
+		e.set_text(request.get_parameter("text"))
+		
 		request.send_redirect(request.get_url_root_parent(2))
+		return e
+		
 		
 	b.div().f().a(request.get_url_root_parent(2)).f().w("<-- back").ca().cdiv()
 	b.br()
@@ -48,6 +50,7 @@ func _handle_edit(request : WebServerRequest) -> void:
 	
 	request.body += b.result
 	request.compile_and_send_body()
+	return null
 
 func _get_editor() -> Control:
 	var WebPageEntryTextEditor : PackedScene = ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryTextEditor.tscn", "PackedScene")

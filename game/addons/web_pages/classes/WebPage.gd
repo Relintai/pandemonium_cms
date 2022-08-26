@@ -154,7 +154,11 @@ func web_editor_handle_edit(request : WebServerRequest) -> bool:
 		return true
 
 	request.push_path()
-	entry.handle_edit(request)
+	
+	var e : WebPageEntry = entry.handle_edit(request)
+	
+	if e:
+		edit_entry_command(entry, e)
 	
 	return true
 
@@ -494,6 +498,8 @@ func _notification(what):
 		if !Engine.editor_hint:
 			_pending_array_mutex.lock()
 			
+			var changed : bool = _pending_commands.size() > 0
+			
 			for i in range(_pending_commands.size()):
 				var e : WebPageEditCommand = _pending_commands[i] as WebPageEditCommand
 				
@@ -502,6 +508,10 @@ func _notification(what):
 			_pending_commands.clear()
 
 			_pending_array_mutex.unlock()
+			
+			if changed:
+				#todo save
+				on_entries_changed()
 
 func _on_entry_changed():
 	on_entries_changed()

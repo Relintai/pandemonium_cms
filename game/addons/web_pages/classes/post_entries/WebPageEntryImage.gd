@@ -40,21 +40,23 @@ func _render(request : WebServerRequest):
 		
 	request.body += '>'
 
-func _handle_edit(request : WebServerRequest) -> void:
+func _handle_edit(request : WebServerRequest) -> WebPageEntry:
 	if !request.can_edit():
 		#should be ERR_FAIL_COND
-		return
+		return null
 	
 	var b : HTMLBuilder = HTMLBuilder.new()
 	
 	if request.get_method() == HTTPServerEnums.HTTP_METHOD_POST:
-		image_url = request.get_parameter("image_url")
-		alt = request.get_parameter("image_alt")
+		var e : WebPageEntry = duplicate()
+		
+		e.image_url = request.get_parameter("image_url")
+		e.alt = request.get_parameter("image_alt")
 		
 		var imgssx : String = request.get_parameter("image_size_x")
 		var imgssy : String = request.get_parameter("image_size_y")
 		
-		image_size = Vector2i(imgssx.to_int(), imgssy.to_int())
+		e.image_size = Vector2i(imgssx.to_int(), imgssy.to_int())
 		
 		if request.get_file_count() > 0:
 			var fd : PoolByteArray = request.get_file_data(0)
@@ -66,12 +68,11 @@ func _handle_edit(request : WebServerRequest) -> void:
 				f.store_buffer(fd)
 				f.close()
 				
-				image_path = "user://" + fn
+				e.image_path = "user://" + fn
 			
 		
-		#b.div().f().w("Save successful!").cdiv()
-		emit_changed()
 		request.send_redirect(request.get_url_root_parent(2))
+		return e
 
 	b.div().f().a(request.get_url_root_parent(2)).f().w("<-- back").ca().cdiv()
 	b.br()
@@ -110,6 +111,7 @@ func _handle_edit(request : WebServerRequest) -> void:
 	
 	request.body += b.result
 	request.compile_and_send_body()
+	return null
 
 func _get_editor() -> Control:
 	var WebPageEntryImageEditor : PackedScene =  ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryImageEditor.tscn", "PackedScene")
