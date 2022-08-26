@@ -16,5 +16,9 @@ func set_text(t : String) -> void:
 func _render(request : WebServerRequest):
 	request.body += compiled_text
 
+func _get_editor() -> Control:
+	var WebPageEntryTextEditor : PackedScene = ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryTextEditor.tscn", "PackedScene")
+	return WebPageEntryTextEditor.instance() as Control
+
 func get_page_entry_class_name() -> String:
 	return "WebPageEntryText"

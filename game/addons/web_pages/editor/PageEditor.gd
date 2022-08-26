@@ -173,18 +173,7 @@ func on_page_entries_changed() -> void:
 	recreate()
 
 func _on_add_entry_class_selected(cls_name : String) -> void:
-	var entry : WebPageEntry = null
-	
-	if cls_name == "WebPageEntryTitleText":
-		entry = WebPageEntryTitleText.new()
-	elif cls_name == "WebPageEntryText":
-		entry = WebPageEntryText.new()
-	elif cls_name == "WebPageEntryImage":
-		entry = WebPageEntryImage.new()
-	
-	if !entry:
-		PLogger.log_error("PageEditor: Couldn't create entry for: " + cls_name)
-		return
+	var entry : WebPageEntry = _page.create_entry(cls_name)
 	
 	add_entry(entry, _entry_add_after)
 	

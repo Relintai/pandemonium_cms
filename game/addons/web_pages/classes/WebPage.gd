@@ -9,8 +9,6 @@ export(Array, Resource) var entries : Array
 
 signal entries_changed()
 
-#TODO fix webperm assign
-
 func _handle_request(request : WebServerRequest):
 	if request.get_remaining_segment_count() > 0:
 		if allow_web_interface_editing:
@@ -263,6 +261,24 @@ func web_editor_handle_delete(request : WebServerRequest) -> bool:
 	request.compile_and_send_body()
 			
 	return true
+
+func create_entry(cls_name : String) -> WebPageEntry:
+	return _create_entry(cls_name)
+	
+func _create_entry(cls_name : String) -> WebPageEntry:
+	var entry : WebPageEntry = null
+	
+	if cls_name == "WebPageEntryTitleText":
+		entry = WebPageEntryTitleText.new()
+	elif cls_name == "WebPageEntryText":
+		entry = WebPageEntryText.new()
+	elif cls_name == "WebPageEntryImage":
+		entry = WebPageEntryImage.new()
+	
+	if !entry:
+		PLogger.log_error("PageEditor: Couldn't create entry for: " + cls_name)
+	
+	return entry
 
 func get_next_id() -> int:
 	var id : int = 0

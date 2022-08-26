@@ -48,5 +48,11 @@ func _render_edit_bar(request : WebServerRequest) -> void:
 	
 	request.body += hb.result
 
+func get_editor() -> Control:
+	return _get_editor()
+	
+func _get_editor() -> Control:
+	return null
+
 func get_page_entry_class_name() -> String:
 	return "WebPageEntry"

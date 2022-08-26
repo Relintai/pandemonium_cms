@@ -40,6 +40,10 @@ func _render(request : WebServerRequest):
 		
 	request.body += '>'
 
+func _get_editor() -> Control:
+	var WebPageEntryImageEditor : PackedScene =  ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryImageEditor.tscn", "PackedScene")
+	return WebPageEntryImageEditor.instance() as Control
+
 func get_page_entry_class_name() -> String:
 	return "WebPageEntryImage"
 	
