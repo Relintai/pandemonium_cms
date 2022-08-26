@@ -52,6 +52,18 @@ func _handle_edit(request : WebServerRequest) -> WebPageEntry:
 	request.compile_and_send_body()
 	return null
 
+func _to_dict() -> Dictionary:
+	var dict : Dictionary = Dictionary()
+	
+	dict["text"] = text
+	
+	return dict
+
+func _from_dict(dict : Dictionary) -> void:
+	var t : String = dict["text"]
+	
+	set_text(t)
+
 func _get_editor() -> Control:
 	var WebPageEntryTextEditor : PackedScene = ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryTextEditor.tscn", "PackedScene")
 	return WebPageEntryTextEditor.instance() as Control

@@ -113,6 +113,24 @@ func _handle_edit(request : WebServerRequest) -> WebPageEntry:
 	request.compile_and_send_body()
 	return null
 
+func _to_dict() -> Dictionary:
+	var dict : Dictionary = Dictionary()
+	
+	dict["image_path"] = image_path
+	dict["image_url"] = image_url
+	dict["alt"] = alt
+	dict["image_size_x"] = image_size.x
+	dict["image_size_y"] = image_size.y
+	
+	return dict
+
+func _from_dict(dict : Dictionary) -> void:
+	image_path = dict["image_path"]
+	image_url = dict["image_url"]
+	alt = dict["alt"]
+	image_size.x = int(dict["image_size_x"])
+	image_size.y = int(dict["image_size_y"])
+
 func _get_editor() -> Control:
 	var WebPageEntryImageEditor : PackedScene =  ResourceLoader.load("res://addons/web_pages/editor/post_entries/WebPageEntryImageEditor.tscn", "PackedScene")
 	return WebPageEntryImageEditor.instance() as Control

@@ -486,8 +486,120 @@ func replace_entry(var entry : WebPageEntry, var data : WebPageEntry) -> void:
 			on_entries_changed()
 			return
 
+func clear_entries() -> void:
+	for i in range(entries.size()):
+		var e : WebPageEntry = entries[i]
+
+		if e && e.is_connected("changed", self, "_on_entry_changed"):
+				e.disconnect("changed", self, "_on_entry_changed")
+	
+	entries.clear()
+
+func save_data():
+	_save_data()
+
+func _save_data():
+	if !Engine.editor_hint && allow_web_interface_editing:
+		var data : Dictionary = Dictionary()
+		
+		data["entries_size"] = entries.size()
+		var entries_data : Array = Array()
+		
+		for i in range(entries.size()):
+			var e : WebPageEntry = entries[i]
+
+			if e:
+				var ed : Dictionary = Dictionary()
+				
+				ed["index"] = i
+				ed["class"] = e.get_page_entry_class_name()
+				ed["data"] = e.to_dict()
+				
+				entries_data.push_back(ed)
+		
+		data["entries"] = entries_data
+		
+		# TODO add get_uri(), get_root_uri(), etc helpers to WebNode
+		var wn : WebNode = self
+		var wnpath : String
+		
+		while wn:
+			wnpath = wn.uri_segment + "_" + wnpath
+			wn = wn.get_parent_webnode()
+		
+		if !wnpath.empty():
+			wnpath = "user://" + wnpath + ".json"
+			
+			var f : File = File.new()
+			f.open(wnpath, File.WRITE)
+			f.store_string(to_json(data))
+			f.close()
+
+func load_data():
+	_load_data()
+
+func _load_data():
+	if !Engine.editor_hint && allow_web_interface_editing:
+		var data : Dictionary = Dictionary()
+		var wn : WebNode = self
+		var wnpath : String
+		
+		while wn:
+			wnpath = wn.uri_segment + "_" + wnpath
+			wn = wn.get_parent_webnode()
+		
+		if !wnpath.empty():
+			wnpath = "user://" + wnpath + ".json"
+			
+			var f : File = File.new()
+			
+			if !f.file_exists(wnpath):
+				return
+			
+			f.open(wnpath, File.READ)
+			var dr : String = f.get_as_text()
+			f.close()
+			
+			var jp : JSONParseResult = JSON.parse(dr)
+			
+			if jp.error != OK:
+				print("jp.error != OK")
+				return
+				
+			data = jp.result
+		
+		if !data.has("entries_size") || !data.has("entries"):
+			return
+		
+		clear_entries()
+		entries.resize(data["entries_size"])
+		var entries_data : Array = data["entries"]
+		
+		for i in range(entries.size()):
+			var ed : Dictionary = entries_data[i]
+			
+			var index : int = ed["index"]
+			
+			if index < 0 || index >= entries.size():
+				print("ERROR! index < 0 || index >= entries.size()")
+				return
+			
+			var cls : String = ed["class"]
+			var edata : Dictionary = ed["data"]
+			
+			var e : WebPageEntry = create_entry(cls)
+			
+			if e:
+				e.from_dict(edata)
+				e.id = index
+				entries[index] = e
+				
+				e.connect("changed", self, "_on_entry_changed")
+				
 func _notification(what):
 	if what == NOTIFICATION_READY:
+		load_data()
+		
 		if !Engine.editor_hint:
 			for i in range(entries.size()):
 				var e : WebPageEntry = entries[i]
@@ -510,7 +622,7 @@ func _notification(what):
 			_pending_array_mutex.unlock()
 			
 			if changed:
-				#todo save
+				save_data()
 				on_entries_changed()
 
 func _on_entry_changed():

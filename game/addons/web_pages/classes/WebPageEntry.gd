@@ -16,6 +16,18 @@ func render(request : WebServerRequest):
 func _render(request : WebServerRequest):
 	pass
 
+func to_dict() -> Dictionary:
+	return _to_dict()
+	
+func from_dict(dict : Dictionary) -> void:
+	_from_dict(dict)
+
+func _to_dict() -> Dictionary:
+	return Dictionary()
+
+func _from_dict(dict : Dictionary) -> void:
+	pass
+
 func handle_edit(request : WebServerRequest) -> WebPageEntry:
 	return _handle_edit(request)
 	
