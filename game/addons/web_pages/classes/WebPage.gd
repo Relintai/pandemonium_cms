@@ -7,9 +7,14 @@ export(bool) var allow_web_interface_editing : bool = false
 
 export(Array, Resource) var entries : Array
 
-signal entries_changed()
+class WebPageEditCommand:
+	var method : StringName
+	var data : Array
 
-var dirty : bool = false
+var _pending_commands : Array = Array()
+var _pending_array_mutex : Mutex = Mutex.new()
+
+signal entries_changed()
 
 func _handle_request(request : WebServerRequest):
 	if request.get_remaining_segment_count() > 0:
@@ -83,7 +88,7 @@ func web_editor_handle_add(request : WebServerRequest) -> bool:
 				entry = WebPageEntryImage.new()
 			
 			if entry:
-				add_entry(entry)
+				add_entry_command(entry)
 				request.send_redirect(request.get_url_root())
 				return true
 			else:
@@ -124,7 +129,7 @@ func web_editor_handle_add(request : WebServerRequest) -> bool:
 	request.compile_and_send_body()
 	
 	return true
-	
+
 func web_editor_handle_edit(request : WebServerRequest) -> bool:
 	if !request.can_edit():
 		return false
@@ -176,10 +181,10 @@ func web_editor_handle_move_up(request : WebServerRequest) -> bool:
 		request.send_error(404)
 		return true
 
-	move_entry_up(entry)
+	move_entry_up_command(entry)
 	request.send_redirect(request.get_url_root_parent(1))
 	return true
-	
+
 func web_editor_handle_move_down(request : WebServerRequest) -> bool:
 	if !request.can_edit():
 		return false
@@ -203,7 +208,7 @@ func web_editor_handle_move_down(request : WebServerRequest) -> bool:
 		request.send_error(404)
 		return true
 
-	move_entry_down(entry)
+	move_entry_down_command(entry)
 	request.send_redirect(request.get_url_root_parent(1))
 	return true
 
@@ -234,7 +239,7 @@ func web_editor_handle_delete(request : WebServerRequest) -> bool:
 		var accept : String = request.get_parameter("accept")
 		
 		if accept == "TRUE":
-			remove_entry(entry)
+			remove_entry_command(entry)
 			request.send_redirect(request.get_url_root_parent())
 			return true
 		else:
@@ -293,6 +298,104 @@ func get_next_id() -> int:
 				
 	return id + 1
 
+func add_entry_command(var entry : WebPageEntry, var after : WebPageEntry = null) -> void:
+	var command : WebPageEditCommand = WebPageEditCommand.new()
+	
+	command.method = "add_entry"
+	command.data.push_back(entry)
+	command.data.push_back(after)
+	
+	var request_write_lock : bool = false
+	
+	_pending_array_mutex.lock()
+	_pending_commands.push_back(command)
+	
+	if _pending_commands.size() == 1:
+		request_write_lock = true
+		
+	_pending_array_mutex.unlock()
+	
+	if request_write_lock:
+		request_write_lock()
+	
+func remove_entry_command(var entry : WebPageEntry) -> void:
+	var command : WebPageEditCommand = WebPageEditCommand.new()
+	
+	command.method = "remove_entry"
+	command.data.push_back(entry)
+	
+	var request_write_lock : bool = false
+	
+	_pending_array_mutex.lock()
+	_pending_commands.push_back(command)
+	
+	if _pending_commands.size() == 1:
+		request_write_lock = true
+		
+	_pending_array_mutex.unlock()
+	
+	if request_write_lock:
+		request_write_lock()
+		
+func move_entry_up_command(var entry : WebPageEntry) -> void:
+	var command : WebPageEditCommand = WebPageEditCommand.new()
+	
+	command.method = "move_entry_up"
+	command.data.push_back(entry)
+	
+	var request_write_lock : bool = false
+
+	_pending_array_mutex.lock()
+	_pending_commands.push_back(command)
+
+	if _pending_commands.size() == 1:
+		request_write_lock = true
+		
+	_pending_array_mutex.unlock()
+	
+	if request_write_lock:
+		request_write_lock()
+		
+func move_entry_down_command(var entry : WebPageEntry) -> void:
+	var command : WebPageEditCommand = WebPageEditCommand.new()
+	
+	command.method = "move_entry_down"
+	command.data.push_back(entry)
+	
+	var request_write_lock : bool = false
+	
+	_pending_array_mutex.lock()
+	_pending_commands.push_back(command)
+	
+	if _pending_commands.size() == 1:
+		request_write_lock = true
+		
+	_pending_array_mutex.unlock()
+	
+	if request_write_lock:
+		request_write_lock()
+		
+	
+func edit_entry_command(var entry : WebPageEntry, var data : WebPageEntry) -> void:
+	var command : WebPageEditCommand = WebPageEditCommand.new()
+	
+	command.method = "replace_entry"
+	command.data.push_back(entry)
+	command.data.push_back(data)
+	
+	var request_write_lock : bool = false
+	
+	_pending_array_mutex.lock()
+	_pending_commands.push_back(command)
+	
+	if _pending_commands.size() == 1:
+		request_write_lock = true
+		
+	_pending_array_mutex.unlock()
+	
+	if request_write_lock:
+		request_write_lock()
+
 func add_entry(var entry : WebPageEntry, var after : WebPageEntry = null) -> void:
 	var id : int = get_next_id()
 	entry.id = id
@@ -327,7 +430,7 @@ func get_entry_with_id(id : int) -> WebPageEntry:
 	return null
 
 func remove_entry(var entry : WebPageEntry) -> void:
-	if entry && entry.is_connected("changed", self, "_on_entry_changed"):
+	if entry && !entry.is_connected("changed", self, "_on_entry_changed"):
 		entry.connect("changed", self, "_on_entry_changed")
 					
 	entries.erase(entry)
@@ -342,7 +445,7 @@ func move_entry_up(var entry : WebPageEntry) -> void:
 			entries[i - 1] = entry
 			on_entries_changed()
 			return
-	
+
 func move_entry_down(var entry : WebPageEntry) -> void:
 	# Skips checking the last entry (size() - 1)
 	for i in range(entries.size() - 1):
@@ -365,6 +468,20 @@ func get_entry_before(var entry : WebPageEntry) -> WebPageEntry:
 	
 	return null
 
+func replace_entry(var entry : WebPageEntry, var data : WebPageEntry) -> void:
+	for i in range(entries.size()):
+		if entries[i] == entry:
+			if entry && entry.is_connected("changed", self, "_on_entry_changed"):
+				entry.disconnect("changed", self, "_on_entry_changed")
+			
+			entries[i] = data
+
+			if data && !data.is_connected("changed", self, "_on_entry_changed"):
+				data.connect("changed", self, "_on_entry_changed")
+
+			on_entries_changed()
+			return
+
 func _notification(what):
 	if what == NOTIFICATION_READY:
 		if !Engine.editor_hint:
@@ -373,17 +490,18 @@ func _notification(what):
 				
 				if e && !e.is_connected("changed", self, "_on_entry_changed"):
 					e.connect("changed", self, "_on_entry_changed")
-#	elif what == NOTIFICATION_WEB_NODE_WRITE_LOCKED:
-#		if !Engine.editor_hint && dirty:
-#			for i in range(entries.size()):
-#				var e : WebPageEntry = entries[i]
-#
-#				if e:
-##					e.apply_pending_changes()
-##					e.to_dict()
-#					pass
-#
-#			dirty = false
+	elif what == NOTIFICATION_WEB_NODE_WRITE_LOCKED:
+		if !Engine.editor_hint:
+			_pending_array_mutex.lock()
+			
+			for i in range(_pending_commands.size()):
+				var e : WebPageEditCommand = _pending_commands[i] as WebPageEditCommand
+				
+				callv(e.method, e.data)
+			
+			_pending_commands.clear()
+
+			_pending_array_mutex.unlock()
 
 func _on_entry_changed():
 	on_entries_changed()
