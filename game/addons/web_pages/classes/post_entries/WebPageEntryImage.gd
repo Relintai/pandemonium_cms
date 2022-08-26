@@ -70,8 +70,9 @@ func _handle_edit(request : WebServerRequest) -> void:
 			
 		
 		#b.div().f().w("Save successful!").cdiv()
+		emit_changed()
 		request.send_redirect(request.get_url_root_parent(2))
-		
+
 	b.div().f().a(request.get_url_root_parent(2)).f().w("<-- back").ca().cdiv()
 	b.br()
 	
@@ -104,8 +105,6 @@ func _handle_edit(request : WebServerRequest) -> void:
 	b.input_submit("Save")
 	b.cform()
 	b.br()
-	
-	
 	
 	b.br()
 	

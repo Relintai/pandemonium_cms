@@ -27,6 +27,7 @@ func _handle_edit(request : WebServerRequest) -> void:
 		set_text(request.get_parameter("text"))
 		
 		#b.div().f().w("Save successful!").cdiv()
+		emit_changed()
 		request.send_redirect(request.get_url_root_parent(2))
 		
 	b.div().f().a(request.get_url_root_parent(2)).f().w("<-- back").ca().cdiv()

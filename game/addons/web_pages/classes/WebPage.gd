@@ -9,6 +9,8 @@ export(Array, Resource) var entries : Array
 
 signal entries_changed()
 
+var dirty : bool = false
+
 func _handle_request(request : WebServerRequest):
 	if request.get_remaining_segment_count() > 0:
 		if allow_web_interface_editing:
@@ -303,7 +305,10 @@ func add_entry(var entry : WebPageEntry, var after : WebPageEntry = null) -> voi
 	else:
 		entries.push_back(entry)
 		
-	emit_signal("entries_changed")
+	if !entry.is_connected("changed", self, "_on_entry_changed"):
+		entry.connect("changed", self, "_on_entry_changed")
+		
+	on_entries_changed()
 
 func get_entry_with_index(index : int) -> WebPageEntry:
 	if index < 0 || index >= entries.size():
@@ -322,9 +327,12 @@ func get_entry_with_id(id : int) -> WebPageEntry:
 	return null
 
 func remove_entry(var entry : WebPageEntry) -> void:
+	if entry && entry.is_connected("changed", self, "_on_entry_changed"):
+		entry.connect("changed", self, "_on_entry_changed")
+					
 	entries.erase(entry)
 	
-	emit_signal("entries_changed")
+	on_entries_changed()
 
 func move_entry_up(var entry : WebPageEntry) -> void:
 	# Skips checking the first entry (1, entries.size())
@@ -332,7 +340,7 @@ func move_entry_up(var entry : WebPageEntry) -> void:
 		if entries[i] == entry:
 			entries[i] = entries[i - 1]
 			entries[i - 1] = entry
-			emit_signal("entries_changed")
+			on_entries_changed()
 			return
 	
 func move_entry_down(var entry : WebPageEntry) -> void:
@@ -341,7 +349,7 @@ func move_entry_down(var entry : WebPageEntry) -> void:
 		if entries[i] == entry:
 			entries[i] = entries[i + 1]
 			entries[i + 1] = entry
-			emit_signal("entries_changed")
+			on_entries_changed()
 			return
 
 func get_entry_before(var entry : WebPageEntry) -> WebPageEntry:
@@ -356,3 +364,30 @@ func get_entry_before(var entry : WebPageEntry) -> WebPageEntry:
 			return entries[i - 1]
 	
 	return null
+
+func _notification(what):
+	if what == NOTIFICATION_READY:
+		if !Engine.editor_hint:
+			for i in range(entries.size()):
+				var e : WebPageEntry = entries[i]
+				
+				if e && !e.is_connected("changed", self, "_on_entry_changed"):
+					e.connect("changed", self, "_on_entry_changed")
+#	elif what == NOTIFICATION_WEB_NODE_WRITE_LOCKED:
+#		if !Engine.editor_hint && dirty:
+#			for i in range(entries.size()):
+#				var e : WebPageEntry = entries[i]
+#
+#				if e:
+##					e.apply_pending_changes()
+##					e.to_dict()
+#					pass
+#
+#			dirty = false
+
+func _on_entry_changed():
+	on_entries_changed()
+	
+func on_entries_changed():
+	emit_signal("entries_changed")
+	
