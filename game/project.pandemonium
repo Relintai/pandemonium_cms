@@ -56,7 +56,7 @@ config/icon="res://icon.png"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/web_gallery/plugin.cfg", "res://addons/web_pages/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/static_web_root/plugin.cfg", "res://addons/web_gallery/plugin.cfg", "res://addons/web_pages/plugin.cfg" )
 
 [physics]
 
