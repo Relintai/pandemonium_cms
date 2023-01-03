@@ -1,16 +1,18 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://WebRoot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://StaticMain.gd" type="Script" id=2]
 [ext_resource path="res://StaticWebServerSimple.gd" type="Script" id=3]
 [ext_resource path="res://StaticMainNode.gd" type="Script" id=4]
 [ext_resource path="res://WebRoot.gd" type="Script" id=5]
+[ext_resource path="res://web_perm_test/webpermission_static_export.tres" type="WebPermission" id=6]
 
 [node name="StaticMain" type="Node"]
 script = ExtResource( 4 )
 
 [node name="StaticMain" type="WebServer" parent="."]
 script = ExtResource( 2 )
+web_permission = ExtResource( 6 )
 
 [node name="WebRoot" parent="StaticMain" instance=ExtResource( 1 )]
 www_root_path = "res://www/"

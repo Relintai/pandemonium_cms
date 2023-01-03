@@ -6,6 +6,8 @@ extends WebServer
 
 var StaticWebServerRequest = preload("res://StaticWebServerRequest.gd")
 
+export(WebPermission) var web_permission : WebPermission
+
 func _ready() -> void:
 	start()
 
@@ -59,6 +61,10 @@ func write_index(n : WebNode, path : String, uri : String, level : int) -> void:
 	request._parser_path = uri
 	request._set_server(self)
 	request._set_web_root(get_web_root())
+	
+	if web_permission:
+		web_permission.activate(request)
+	
 	request.setup_url_stack()
 	
 	for i in range(level):
