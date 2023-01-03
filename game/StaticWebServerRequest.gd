@@ -11,6 +11,7 @@ var _response_type : int = 0
 var _status_code : int = HTTPServerEnums.HTTP_STATUS_CODE_200_OK
 var _sent_message : String = ""
 var _error_handler_called : bool = false
+var _parser_path : String = "/"
 
 func _send_redirect(location: String, status_code: int) -> void:
 	_response_type = ResponseType.RESPONSE_TYPE_REDIRECT;
@@ -30,4 +31,5 @@ func _send_error(error_code: int) -> void:
 	
 	get_server().get_web_root().handle_error_send_request(self, error_code);
 	
-	
+func _parser_get_path() -> String:
+	return _parser_path

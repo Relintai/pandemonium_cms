@@ -29,7 +29,7 @@ func export_web_project() -> void:
 	
 	prepare_dir(export_folder)
 
-	evaluate_web_node(get_web_root(), "/", export_folder)
+	evaluate_web_node(get_web_root(), "/", export_folder, 0)
 
 func copy_folder(path_from : String, path_to : String) -> void:
 	var dir : Directory = Directory.new()
@@ -54,10 +54,16 @@ func copy_file(path_from : String, path_to : String) -> void:
 	
 	dir.copy(path_from, path_to)
 
-func write_index(n : WebNode, path : String) -> void:
+func write_index(n : WebNode, path : String, uri : String, level : int) -> void:
 	var request : WebServerRequestScriptable = StaticWebServerRequest.new()
+	request._parser_path = uri
 	request._set_server(self)
 	request._set_web_root(get_web_root())
+	request.setup_url_stack()
+	
+	for i in range(level):
+		request.push_path()
+	
 	n.handle_request(request)
 	
 	var file : File = File.new()
@@ -66,7 +72,7 @@ func write_index(n : WebNode, path : String) -> void:
 	file.close()
 	
 
-func evaluate_web_node(n : WebNode, web_node_path : String, path : String) -> void:
+func evaluate_web_node(n : WebNode, web_node_path : String, path : String, level : int) -> void:
 	make_dir_recursive(path)
 	
 	if n is WebRoot:
@@ -78,10 +84,10 @@ func evaluate_web_node(n : WebNode, web_node_path : String, path : String) -> vo
 				if c.uri_segment != "/":
 					continue
 				
-				write_index(c, path)
+				write_index(c, path, web_node_path, level)
 				break
 	else:
-		write_index(n, path)
+		write_index(n, path, web_node_path, level)
 		
 	if n.has_method("_get_served_file_list"):
 		var file_arr : Array = Array()
@@ -91,13 +97,15 @@ func evaluate_web_node(n : WebNode, web_node_path : String, path : String) -> vo
 			var f : Array = file_arr[i]
 			
 			copy_file(f[0], path.plus_file(f[1]))
-		
+	
+	level += 1
+	
 	for c in n.get_children():
 		if c is WebNode:
 			if c.uri_segment.empty() || c.uri_segment == "/":
 				continue
 				
-			evaluate_web_node(c, web_node_path.append_path(c.uri_segment), path.append_path(c.uri_segment))
+			evaluate_web_node(c, web_node_path.append_path(c.uri_segment), path.append_path(c.uri_segment), level)
 
 
 func _on_ExportButton_pressed() -> void:
