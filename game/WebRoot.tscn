@@ -1,0 +1,61 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://addons/web_pages/classes/post_entries/WebPageEntryText.gd" type="Script" id=1]
+[ext_resource path="res://addons/web_pages/classes/post_entries/WebPageEntryTitleText.gd" type="Script" id=2]
+[ext_resource path="res://web_perm_test/new_webpermission.tres" type="WebPermission" id=3]
+[ext_resource path="res://addons/web_pages/classes/WebPage.gd" type="Script" id=4]
+[ext_resource path="res://addons/web_pages/classes/post_entries/WebPageEntryImage.gd" type="Script" id=5]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 2 )
+id = 1
+text = "Test Title"
+hsize = 1
+
+[sub_resource type="Resource" id=4]
+script = ExtResource( 1 )
+id = 2
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+Pharetra et ultrices neque ornare aenean. At in tellus integer feugiat scelerisque. Quis enim lobortis scelerisque fermentum dui faucibus in ornare quam. 
+
+Velit scelerisque in dictum non consectetur a. Habitasse platea dictumst vestibulum rhoncus est pellentesque. 
+Amet commodo nulla facilisi nullam vehicula ipsum a. Viverra nam libero justo laoreet sit amet cursus. Neque convallis a cras semper. 
+Eget lorem dolor sed viverra. Et malesuada fames ac turpis. Velit euismod in pellentesque massa placerat duis ultricies lacus. 
+
+Lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi. Dolor sit amet consectetur adipiscing elit. 
+Dui nunc mattis enim ut tellus elementum sagittis vitae. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. 
+Consectetur libero id faucibus nisl tincidunt eget nullam non nisi. Quam nulla porttitor massa id neque aliquam. Facilisis gravida neque convallis a cras semper auctor. 
+In pellentesque massa placerat duis."
+
+[sub_resource type="Resource" id=5]
+script = ExtResource( 5 )
+id = 3
+image_path = "res://test_img/icon.png"
+image_url = "img"
+alt = "Test Alt Text"
+image_size = Vector2i( 100, 100 )
+
+[sub_resource type="Resource" id=3]
+script = ExtResource( 2 )
+id = 4
+text = "An another test title"
+hsize = 1
+
+[sub_resource type="Resource" id=2]
+script = ExtResource( 2 )
+id = 5
+text = "Title!"
+hsize = 1
+
+[node name="WebRoot" type="WebRoot"]
+
+[node name="index" type="StaticWebPage" parent="."]
+uri_segment = "/"
+data = "<a href=\"/page\">Page</a>"
+
+[node name="page" type="WebNode" parent="."]
+uri_segment = "page"
+web_permission = ExtResource( 3 )
+script = ExtResource( 4 )
+allow_web_interface_editing = true
+entries = [ SubResource( 1 ), SubResource( 4 ), SubResource( 5 ), SubResource( 3 ), SubResource( 2 ) ]
