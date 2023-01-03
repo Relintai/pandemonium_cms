@@ -113,3 +113,4 @@ func _on_ExportButton_pressed() -> void:
 
 func _on_OpenFolderButton_pressed() -> void:
 	OS.shell_open(OS.get_user_data_dir())
+
