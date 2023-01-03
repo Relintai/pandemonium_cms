@@ -23,6 +23,12 @@ func _handle_request(request : WebServerRequest) -> bool:
 		
 	return false
 
+func _get_served_file_list(files_arr : Array):
+	if image_url.empty() || image_path.empty():
+		return
+		
+	files_arr.push_back([ image_path, image_url ])
+
 func _render(request : WebServerRequest):
 	if image_url.empty() || image_path.empty():
 		return

@@ -54,6 +54,13 @@ func _handle_request(request : WebServerRequest):
 	
 	request.compile_and_send_body()
 
+func _get_served_file_list(files_arr : Array):
+	for i in range(entries.size()):
+		var e : WebPageEntry = entries[i]
+		
+		if e:
+			e._get_served_file_list(files_arr)
+
 func web_editor_try_handle(request : WebServerRequest) -> bool:
 	var path_segment : String = request.get_current_path_segment()
 	

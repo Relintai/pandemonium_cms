@@ -16,6 +16,9 @@ func render(request : WebServerRequest):
 func _render(request : WebServerRequest):
 	pass
 
+func _get_served_file_list(arr : Array):
+	pass
+
 func to_dict() -> Dictionary:
 	return _to_dict()
 	

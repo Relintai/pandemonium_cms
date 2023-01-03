@@ -48,6 +48,12 @@ func copy_folder(path_from : String, path_to : String) -> void:
 	else:
 		print("An error occurred when trying to access the path: %s " % path_from)
 
+func copy_file(path_from : String, path_to : String) -> void:
+	var dir : Directory = Directory.new()
+	dir.make_dir_recursive(path_to.get_base_dir())
+	
+	dir.copy(path_from, path_to)
+
 func write_index(n : WebNode, path : String) -> void:
 	var request : WebServerRequestScriptable = StaticWebServerRequest.new()
 	request._set_server(self)
@@ -76,6 +82,15 @@ func evaluate_web_node(n : WebNode, web_node_path : String, path : String) -> vo
 				break
 	else:
 		write_index(n, path)
+		
+	if n.has_method("_get_served_file_list"):
+		var file_arr : Array = Array()
+		n._get_served_file_list(file_arr)
+		
+		for i in range(file_arr.size()):
+			var f : Array = file_arr[i]
+			
+			copy_file(f[0], path.plus_file(f[1]))
 		
 	for c in n.get_children():
 		if c is WebNode:
