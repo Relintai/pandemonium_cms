@@ -4,4 +4,4 @@
 
 [resource]
 script = ExtResource( 1 )
-permissions = 1
+permissions = 15
